@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"><meta name="theme-color" content="#e4e4e2"><title>クロロを殴る</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"><meta name="theme-color" content="#e4e4e2"><script>try{var t=localStorage.getItem('chrollo-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}</script><title>クロロを殴る</title>
 <style>
 /* ---------- base (shared with the edit page, which stays dark) ---------- */
 *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",system-ui,sans-serif;overscroll-behavior:none}
@@ -18,17 +18,31 @@ button{font:inherit}
 /* soft "neumorphic" light: every raised part has a light edge top-left and a shadow bottom-right; wells are the reverse */
 body[data-page=home],body[data-page=edit]{
  --bg:#e4e4e2;--ink:#55554f;--ink-soft:#8c8c86;--dark:rgba(155,155,148,.62);--light:rgba(255,255,255,.95);
+ --hi:#fff;--hi2:rgba(255,255,255,.85);--line:rgba(0,0,0,.08);--ink-strong:#000;--note:#8a5a14;--opt-bg:#ececea;--opt-ink:#33332f;
+ --k1:#eeeeec;--k2:#dedede;--k3:#dcdcda;--k4:#e8e8e6;--g1:#ecece9;--g2:#dcdcd9;--tick:rgba(0,0,0,.16);--tick-on:#2e2e2b;
+ --play-ink:#1d2f55;--play-a:#eaf0ff;--play-b:#d2dcf4;
  --raise:7px 7px 15px var(--dark),-7px -7px 15px var(--light);
  --raise-s:4px 4px 9px var(--dark),-4px -4px 9px var(--light);
  --sink:inset 6px 6px 12px var(--dark),inset -6px -6px 12px var(--light);
  --sink-s:inset 3px 3px 7px var(--dark),inset -3px -3px 7px var(--light);
- color:var(--ink);background:linear-gradient(150deg,#ecece9 0%,var(--bg) 45%,#dcdcd9 100%) fixed}
+ color:var(--ink);background:linear-gradient(150deg,var(--g1) 0%,var(--bg) 45%,var(--g2) 100%) fixed}
+/* dark theme: same soft shapes, light edge becomes a faint glow and the shadow gets deeper (html[data-theme=dark] is set by the head script / the toggle) */
+html[data-theme=dark] body[data-page=home],html[data-theme=dark] body[data-page=edit]{
+ color-scheme:dark;
+ --bg:#26272b;--ink:#d6d6d2;--ink-soft:#8a8b90;--dark:rgba(0,0,0,.6);--light:rgba(255,255,255,.06);
+ --hi:rgba(0,0,0,.7);--hi2:rgba(255,255,255,.06);--line:rgba(0,0,0,.55);--ink-strong:#fff;--note:#e0b872;--opt-bg:#2f3036;--opt-ink:#dcdcd8;
+ --k1:#2f3035;--k2:#232428;--k3:#212226;--k4:#2a2b30;--g1:#2b2c31;--g2:#1e1f22;--tick:rgba(255,255,255,.14);--tick-on:#d8d8d4;
+ --play-ink:#d4e2ff;--play-a:#3b4768;--play-b:#2b3552}
 body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) calc(88px + env(safe-area-inset-bottom));gap:clamp(12px,3vw,18px)}
 .top{width:min(100%,600px);display:flex;align-items:center;justify-content:flex-end;gap:12px}
-.language-bar{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-soft);white-space:nowrap}
-.language-bar label{margin:0;text-shadow:0 1px 0 #fff}
-.language-bar select{font-size:13px;font-weight:700;color:var(--ink);padding:9px 16px;border:0;border-radius:999px;background:var(--bg);box-shadow:var(--raise-s)}
-.language-bar select:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+/* language: the label "🌐 Language ▾" is the control; the real <select> lies invisibly on top of it, so a tap opens the native list */
+.language-bar{position:relative;display:inline-flex;align-items:center;gap:6px;padding:8px 6px;font-size:11px;font-weight:700;color:var(--ink-soft);white-space:nowrap;border-radius:8px}
+.language-bar::after{content:"\25BE";font-size:1.15em;line-height:1}
+.language-bar:hover,.language-bar:focus-within{color:var(--ink)}.language-bar:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
+.language-bar label{margin:0;text-shadow:0 1px 0 var(--hi);pointer-events:none}
+.theme-toggle{appearance:none;-webkit-appearance:none;border:0;padding:0;width:35px;height:35px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);cursor:pointer;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s;-webkit-tap-highlight-color:transparent}
+.theme-toggle:active{box-shadow:var(--sink-s)}.theme-toggle:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+.language-bar select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
 
 .device{width:min(100%,600px)}
 .bezel{padding:clamp(10px,3vw,16px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,9px 9px 18px var(--dark),-9px -9px 18px var(--light)}
@@ -43,7 +57,7 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
   linear-gradient(90deg,rgba(255,50,50,.11) 0 33.3%,rgba(50,255,50,.08) 33.3% 66.6%,rgba(70,70,255,.12) 66.6% 100%) 0 0/var(--led) var(--led)}
 .stage[data-led=on] canvas{filter:saturate(1.22) contrast(1.07) brightness(1.08)}
 .stage[data-led=off]::before{display:none}
-.brand{display:flex;justify-content:space-between;align-items:center;padding:clamp(8px,2vw,12px) 4px clamp(10px,2.4vw,14px);font-weight:800;font-size:clamp(11px,2.8vw,13px);letter-spacing:.18em;color:var(--ink-soft);text-shadow:0 1px 0 #fff}
+.brand{display:flex;justify-content:space-between;align-items:center;padding:clamp(8px,2vw,12px) 4px clamp(10px,2.4vw,14px);font-weight:800;font-size:clamp(11px,2.8vw,13px);letter-spacing:.18em;color:var(--ink-soft);text-shadow:0 1px 0 var(--hi)}
 .brand-power{appearance:none;-webkit-appearance:none;border:0;background:none;margin:-6px -8px;padding:6px 8px;border-radius:8px;font:inherit;letter-spacing:inherit;color:inherit;text-shadow:inherit;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
 .brand-power[aria-pressed=false]{color:#d4552d}
 .brand-power:focus-visible{outline:2px solid #6d7cff;outline-offset:2px}
@@ -52,8 +66,8 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 
 /* the pad: a sunken tray holding raised keys (three across, Uppercut wide) */
 .pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,3vw,16px);padding:clamp(14px,4vw,22px);border-radius:clamp(24px,6vw,34px);background:var(--bg);box-shadow:var(--sink)}
-.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 #fff;background:linear-gradient(145deg,#eeeeec,#dedede);box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,#dcdcda,#e8e8e6);box-shadow:var(--sink-s);transform:scale(.985)}
+.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 var(--hi);background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,var(--k3),var(--k4));box-shadow:var(--sink-s);transform:scale(.985)}
 .attack-btn:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 .attack-btn .key{font-weight:600;display:block;font-size:clamp(10px,2.6vw,11.5px);color:var(--ink-soft);letter-spacing:.05em}
 .attack-btn[data-attack="body"]{grid-column:1/-1;min-height:clamp(68px,19vw,84px)}
@@ -64,28 +78,28 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 /* the rest of the page, in the same soft plastic */
 body[data-page=home] .unofficial-note{width:min(100%,600px);margin:0;padding:2px 10px;color:var(--ink-soft);font-size:11px;line-height:1.5;text-align:center;letter-spacing:.01em}
 body[data-page=home] footer{width:min(100%,600px);text-align:center;color:var(--ink-soft);font-size:12px;line-height:1.6}
-.legal{width:min(100%,600px);margin:100px 0 0;padding:22px 10px 0;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -1px 0 rgba(255,255,255,.85);text-align:center;user-select:text;-webkit-user-select:text}
+.legal{width:min(100%,600px);margin:100px 0 0;padding:22px 10px 0;border-top:1px solid var(--line);box-shadow:0 -1px 0 var(--hi2);text-align:center;user-select:text;-webkit-user-select:text}
 .legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55;color:var(--ink-soft);overflow-wrap:anywhere}
 /* Instagram: a plain text link on its own line right after the legal notice, aligned to the right (also copied to the edit page) */
 .legal .legal-foot,#editPage .legal .legal-foot{margin:10px 0 0;text-align:right}
 .legal-foot a{font-size:12px;letter-spacing:.04em}
-.legal a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.legal a:hover,.legal a:focus-visible{color:#000}.legal a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+.legal a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.legal a:hover,.legal a:focus-visible{color:var(--ink-strong)}.legal a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
 /* the same notice (with its Instagram line) sits at the bottom of the edit page, 40px below the last card */
 #editPage .legal{width:min(100%,600px);margin:calc(40px - clamp(12px,3vw,18px)) 0 0}
 #editPage .legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55}
 .credit{margin:14px 0 6px;padding:0 6px;font-size:11px;line-height:1.6;color:var(--ink-soft)}
-.credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:#000}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
-.developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:#000}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
-.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 #fff;transition:box-shadow .08s}
+.credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:var(--ink-strong)}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+.developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:var(--ink-strong)}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
+.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
 .music-toggle:active,.music-toggle[aria-expanded=true]{box-shadow:var(--sink-s)}
 .music-toggle:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 body[data-page=home] #musicPanel{width:min(100%,600px);padding:clamp(16px,4vw,22px);border:0;border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
-body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 var(--hi)}
 body[data-page=home] #musicPanel label,body[data-page=home] #musicPanel p{color:var(--ink-soft)}
-body[data-page=home] #musicPanel #musicNote{color:#8a5a14}
+body[data-page=home] #musicPanel #musicNote{color:var(--note)}
 body[data-page=home] #musicPanel input[type=url]{background:var(--bg);color:var(--ink);border:0;border-radius:999px;padding:13px 18px;box-shadow:var(--sink-s)}
 body[data-page=home] #musicPanel input[type=range]{accent-color:#77776f}
-body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
 body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
 /* the song player is just the video: no card around it and no title */
 .now-playing{width:min(100%,600px);padding:0;background:none;border:0;border-radius:0;box-shadow:none}
@@ -93,15 +107,15 @@ body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
 .now-playing iframe,.now-playing video{display:block;width:100%;height:185px;border:0;border-radius:8px;background:#050505;box-shadow:var(--raise-s)}.now-playing #youtubeMount{width:100%;height:185px}.now-playing #youtubeMount iframe{height:100%}.now-playing.audio-only video{height:55px}
 
 /* corner control added by editor.js (Sample list) */
-body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
-body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
+body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
+body[data-page=home] .ed-sample option{background:var(--opt-bg);color:var(--opt-ink)}
 
 @media(max-width:730px){.now-playing iframe,.now-playing video,.now-playing #youtubeMount{height:clamp(120px,34vw,180px)}.now-playing.audio-only video{height:49px}}
 
 /* phones: smaller Edit pill, smaller punch labels (still two lines), compact music controls */
 @media(max-width:560px){
- body[data-page=home] .language-bar{font-size:10px;gap:6px}
- body[data-page=home] .language-bar select{font-size:11.5px;padding:6px 12px}
+ body[data-page=home] .theme-toggle{width:26px;height:26px;font-size:12px}
+ body[data-page=home] .language-bar{font-size:10px;gap:5px;padding:6px 4px}
  body[data-page=home] .brand{padding-top:8px;padding-bottom:10px;font-size:11px}
  body[data-page=home] .brand-edit{height:26px;padding:0 12px;font-size:11px;letter-spacing:.08em}
  body[data-page=home] .pad{gap:9px;padding:14px}
@@ -127,7 +141,7 @@ body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
 }
 </style></head>
 <body data-page="home"><main>
-<header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div></header>
+<header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div><button type="button" class="theme-toggle" aria-pressed="false">&#9790;</button></header>
 <!-- the player for a loaded song sits at the top of the page; the music button and panel stay below the device -->
 <div class="now-playing" id="nowPlaying" hidden><div class="now-playing-title" id="nowPlayingTitle" data-i18n="nowPlayingDefault">再生中の曲</div><video id="musicMedia" controls playsinline preload="metadata" hidden></video><div id="youtubeMount" hidden></div></div>
 <div class="device">
@@ -155,6 +169,24 @@ body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
 <p><span data-i18n="legalCreator">Original creator: </span><a href="https://wild-brook-0ec1.gaba81914.workers.dev/" target="_blank" rel="noopener noreferrer" title="https://wild-brook-0ec1.gaba81914.workers.dev/" data-i18n="legalGame">Original game &#8599;</a></p>
 <p class="legal-foot"><a href="https://www.instagram.com/artsipan_" target="_blank" rel="noopener noreferrer">Instagram</a></p></section>
 </main>
+<script>
+// Light / dark: the toggle buttons (game page and edit page) switch html[data-theme]; the choice is remembered on this device.
+(()=>{const KEY='chrollo-theme',root=document.documentElement,meta=document.querySelector('meta[name=theme-color]');
+ const tr=k=>{try{return window.i18n?window.i18n.t(k):''}catch(e){return ''}};
+ function paint(){
+  const dark=root.dataset.theme==='dark';
+  if(meta)meta.content=dark?'#26272b':'#e4e4e2';
+  document.querySelectorAll('.theme-toggle').forEach(b=>{
+   b.textContent=dark?'\u2600\uFE0E':'\u263E';
+   const label=(tr(dark?'themeToLight':'themeToDark'))||(dark?'Switch to light mode':'Switch to dark mode');
+   b.title=label;b.setAttribute('aria-label',label);b.setAttribute('aria-pressed',String(dark));
+  });
+ }
+ function set(t){root.dataset.theme=t;try{localStorage.setItem(KEY,t)}catch(e){}paint()}
+ document.addEventListener('click',e=>{if(e.target.closest('.theme-toggle'))set(root.dataset.theme==='dark'?'light':'dark')});
+ const sel=document.getElementById('languageSelect');if(sel)sel.addEventListener('change',()=>setTimeout(paint,0));   // tooltip follows the language
+ window.chrolloTheme={sync:paint};paint();addEventListener('load',paint);})();
+</script>
 <script>
 // PUNCH = LED screen effect on/off (remembered on this device when storage is available)
 (()=>{const b=document.getElementById('ledToggle'),s=document.getElementById('stage');let on=true;

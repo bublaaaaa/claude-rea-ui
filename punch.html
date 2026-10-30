@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"><meta name="theme-color" content="#e4e4e2"><title>クロロを殴る</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"><meta name="theme-color" content="#e4e4e2"><script>try{var t=localStorage.getItem('chrollo-theme');document.documentElement.dataset.theme=t==='dark'?'dark':'light'}catch(e){document.documentElement.dataset.theme='light'}</script><title>クロロを殴る</title>
 <style>
 /* ---------- base (shared with the edit page, which stays dark) ---------- */
 *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",system-ui,sans-serif;overscroll-behavior:none}
@@ -18,17 +18,31 @@ button{font:inherit}
 /* soft "neumorphic" light: every raised part has a light edge top-left and a shadow bottom-right; wells are the reverse */
 body[data-page=home],body[data-page=edit]{
  --bg:#e4e4e2;--ink:#55554f;--ink-soft:#8c8c86;--dark:rgba(155,155,148,.62);--light:rgba(255,255,255,.95);
+ --hi:#fff;--hi2:rgba(255,255,255,.85);--line:rgba(0,0,0,.08);--ink-strong:#000;--note:#8a5a14;--opt-bg:#ececea;--opt-ink:#33332f;
+ --k1:#eeeeec;--k2:#dedede;--k3:#dcdcda;--k4:#e8e8e6;--g1:#ecece9;--g2:#dcdcd9;--tick:rgba(0,0,0,.16);--tick-on:#2e2e2b;
+ --play-ink:#1d2f55;--play-a:#eaf0ff;--play-b:#d2dcf4;
  --raise:7px 7px 15px var(--dark),-7px -7px 15px var(--light);
  --raise-s:4px 4px 9px var(--dark),-4px -4px 9px var(--light);
  --sink:inset 6px 6px 12px var(--dark),inset -6px -6px 12px var(--light);
  --sink-s:inset 3px 3px 7px var(--dark),inset -3px -3px 7px var(--light);
- color:var(--ink);background:linear-gradient(150deg,#ecece9 0%,var(--bg) 45%,#dcdcd9 100%) fixed}
+ color:var(--ink);background:linear-gradient(150deg,var(--g1) 0%,var(--bg) 45%,var(--g2) 100%) fixed}
+/* dark theme: same soft shapes, light edge becomes a faint glow and the shadow gets deeper (html[data-theme=dark] is set by the head script / the toggle) */
+html[data-theme=dark] body[data-page=home],html[data-theme=dark] body[data-page=edit]{
+ color-scheme:dark;
+ --bg:#26272b;--ink:#d6d6d2;--ink-soft:#8a8b90;--dark:rgba(0,0,0,.6);--light:rgba(255,255,255,.06);
+ --hi:rgba(0,0,0,.7);--hi2:rgba(255,255,255,.06);--line:rgba(0,0,0,.55);--ink-strong:#fff;--note:#e0b872;--opt-bg:#2f3036;--opt-ink:#dcdcd8;
+ --k1:#2f3035;--k2:#232428;--k3:#212226;--k4:#2a2b30;--g1:#2b2c31;--g2:#1e1f22;--tick:rgba(255,255,255,.14);--tick-on:#d8d8d4;
+ --play-ink:#d4e2ff;--play-a:#3b4768;--play-b:#2b3552}
 body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) calc(88px + env(safe-area-inset-bottom));gap:clamp(12px,3vw,18px)}
 .top{width:min(100%,600px);display:flex;align-items:center;justify-content:flex-end;gap:12px}
-.language-bar{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-soft);white-space:nowrap}
-.language-bar label{margin:0;text-shadow:0 1px 0 #fff}
-.language-bar select{font-size:13px;font-weight:700;color:var(--ink);padding:9px 16px;border:0;border-radius:999px;background:var(--bg);box-shadow:var(--raise-s)}
-.language-bar select:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+/* language: the label "🌐 Language ▾" is the control; the real <select> lies invisibly on top of it, so a tap opens the native list */
+.language-bar{position:relative;display:inline-flex;align-items:center;gap:6px;padding:8px 6px;font-size:11px;font-weight:700;color:var(--ink-soft);white-space:nowrap;border-radius:8px}
+.language-bar::after{content:"\25BE";font-size:1.15em;line-height:1}
+.language-bar:hover,.language-bar:focus-within{color:var(--ink)}.language-bar:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
+.language-bar label{margin:0;text-shadow:0 1px 0 var(--hi);pointer-events:none}
+.theme-toggle{appearance:none;-webkit-appearance:none;border:0;padding:0;width:35px;height:35px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);cursor:pointer;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s;-webkit-tap-highlight-color:transparent}
+.theme-toggle:active{box-shadow:var(--sink-s)}.theme-toggle:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+.language-bar select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
 
 .device{width:min(100%,600px)}
 .bezel{padding:clamp(10px,3vw,16px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,9px 9px 18px var(--dark),-9px -9px 18px var(--light)}
@@ -43,7 +57,7 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
   linear-gradient(90deg,rgba(255,50,50,.11) 0 33.3%,rgba(50,255,50,.08) 33.3% 66.6%,rgba(70,70,255,.12) 66.6% 100%) 0 0/var(--led) var(--led)}
 .stage[data-led=on] canvas{filter:saturate(1.22) contrast(1.07) brightness(1.08)}
 .stage[data-led=off]::before{display:none}
-.brand{display:flex;justify-content:space-between;align-items:center;padding:clamp(8px,2vw,12px) 4px clamp(10px,2.4vw,14px);font-weight:800;font-size:clamp(11px,2.8vw,13px);letter-spacing:.18em;color:var(--ink-soft);text-shadow:0 1px 0 #fff}
+.brand{display:flex;justify-content:space-between;align-items:center;padding:clamp(8px,2vw,12px) 4px clamp(10px,2.4vw,14px);font-weight:800;font-size:clamp(11px,2.8vw,13px);letter-spacing:.18em;color:var(--ink-soft);text-shadow:0 1px 0 var(--hi)}
 .brand-power{appearance:none;-webkit-appearance:none;border:0;background:none;margin:-6px -8px;padding:6px 8px;border-radius:8px;font:inherit;letter-spacing:inherit;color:inherit;text-shadow:inherit;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
 .brand-power[aria-pressed=false]{color:#d4552d}
 .brand-power:focus-visible{outline:2px solid #6d7cff;outline-offset:2px}
@@ -52,8 +66,8 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 
 /* the pad: a sunken tray holding raised keys (three across, Uppercut wide) */
 .pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,3vw,16px);padding:clamp(14px,4vw,22px);border-radius:clamp(24px,6vw,34px);background:var(--bg);box-shadow:var(--sink)}
-.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 #fff;background:linear-gradient(145deg,#eeeeec,#dedede);box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,#dcdcda,#e8e8e6);box-shadow:var(--sink-s);transform:scale(.985)}
+.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 var(--hi);background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,var(--k3),var(--k4));box-shadow:var(--sink-s);transform:scale(.985)}
 .attack-btn:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 .attack-btn .key{font-weight:600;display:block;font-size:clamp(10px,2.6vw,11.5px);color:var(--ink-soft);letter-spacing:.05em}
 .attack-btn[data-attack="body"]{grid-column:1/-1;min-height:clamp(68px,19vw,84px)}
@@ -64,28 +78,28 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 /* the rest of the page, in the same soft plastic */
 body[data-page=home] .unofficial-note{width:min(100%,600px);margin:0;padding:2px 10px;color:var(--ink-soft);font-size:11px;line-height:1.5;text-align:center;letter-spacing:.01em}
 body[data-page=home] footer{width:min(100%,600px);text-align:center;color:var(--ink-soft);font-size:12px;line-height:1.6}
-.legal{width:min(100%,600px);margin:100px 0 0;padding:22px 10px 0;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -1px 0 rgba(255,255,255,.85);text-align:center;user-select:text;-webkit-user-select:text}
+.legal{width:min(100%,600px);margin:100px 0 0;padding:22px 10px 0;border-top:1px solid var(--line);box-shadow:0 -1px 0 var(--hi2);text-align:center;user-select:text;-webkit-user-select:text}
 .legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55;color:var(--ink-soft);overflow-wrap:anywhere}
 /* Instagram: a plain text link on its own line right after the legal notice, aligned to the right (also copied to the edit page) */
 .legal .legal-foot,#editPage .legal .legal-foot{margin:10px 0 0;text-align:right}
 .legal-foot a{font-size:12px;letter-spacing:.04em}
-.legal a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.legal a:hover,.legal a:focus-visible{color:#000}.legal a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+.legal a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.legal a:hover,.legal a:focus-visible{color:var(--ink-strong)}.legal a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
 /* the same notice (with its Instagram line) sits at the bottom of the edit page, 40px below the last card */
 #editPage .legal{width:min(100%,600px);margin:calc(40px - clamp(12px,3vw,18px)) 0 0}
 #editPage .legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55}
 .credit{margin:14px 0 6px;padding:0 6px;font-size:11px;line-height:1.6;color:var(--ink-soft)}
-.credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:#000}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
-.developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:#000}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
-.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 #fff;transition:box-shadow .08s}
+.credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:var(--ink-strong)}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+.developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:var(--ink-strong)}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
+.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
 .music-toggle:active,.music-toggle[aria-expanded=true]{box-shadow:var(--sink-s)}
 .music-toggle:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 body[data-page=home] #musicPanel{width:min(100%,600px);padding:clamp(16px,4vw,22px);border:0;border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
-body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 var(--hi)}
 body[data-page=home] #musicPanel label,body[data-page=home] #musicPanel p{color:var(--ink-soft)}
-body[data-page=home] #musicPanel #musicNote{color:#8a5a14}
+body[data-page=home] #musicPanel #musicNote{color:var(--note)}
 body[data-page=home] #musicPanel input[type=url]{background:var(--bg);color:var(--ink);border:0;border-radius:999px;padding:13px 18px;box-shadow:var(--sink-s)}
 body[data-page=home] #musicPanel input[type=range]{accent-color:#77776f}
-body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
 body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
 /* the song player is just the video: no card around it and no title */
 .now-playing{width:min(100%,600px);padding:0;background:none;border:0;border-radius:0;box-shadow:none}
@@ -93,15 +107,15 @@ body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
 .now-playing iframe,.now-playing video{display:block;width:100%;height:185px;border:0;border-radius:8px;background:#050505;box-shadow:var(--raise-s)}.now-playing #youtubeMount{width:100%;height:185px}.now-playing #youtubeMount iframe{height:100%}.now-playing.audio-only video{height:55px}
 
 /* corner control added by editor.js (Sample list) */
-body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
-body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
+body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
+body[data-page=home] .ed-sample option{background:var(--opt-bg);color:var(--opt-ink)}
 
 @media(max-width:730px){.now-playing iframe,.now-playing video,.now-playing #youtubeMount{height:clamp(120px,34vw,180px)}.now-playing.audio-only video{height:49px}}
 
 /* phones: smaller Edit pill, smaller punch labels (still two lines), compact music controls */
 @media(max-width:560px){
- body[data-page=home] .language-bar{font-size:10px;gap:6px}
- body[data-page=home] .language-bar select{font-size:11.5px;padding:6px 12px}
+ body[data-page=home] .theme-toggle{width:26px;height:26px;font-size:12px}
+ body[data-page=home] .language-bar{font-size:10px;gap:5px;padding:6px 4px}
  body[data-page=home] .brand{padding-top:8px;padding-bottom:10px;font-size:11px}
  body[data-page=home] .brand-edit{height:26px;padding:0 12px;font-size:11px;letter-spacing:.08em}
  body[data-page=home] .pad{gap:9px;padding:14px}
@@ -127,7 +141,7 @@ body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
 }
 </style></head>
 <body data-page="home"><main>
-<header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div></header>
+<header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div><button type="button" class="theme-toggle" aria-pressed="false">&#9790;</button></header>
 <!-- the player for a loaded song sits at the top of the page; the music button and panel stay below the device -->
 <div class="now-playing" id="nowPlaying" hidden><div class="now-playing-title" id="nowPlayingTitle" data-i18n="nowPlayingDefault">再生中の曲</div><video id="musicMedia" controls playsinline preload="metadata" hidden></video><div id="youtubeMount" hidden></div></div>
 <div class="device">
@@ -156,6 +170,24 @@ body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
 <p class="legal-foot"><a href="https://www.instagram.com/artsipan_" target="_blank" rel="noopener noreferrer">Instagram</a></p></section>
 </main>
 <script>
+// Light / dark: the toggle buttons (game page and edit page) switch html[data-theme]; the choice is remembered on this device.
+(()=>{const KEY='chrollo-theme',root=document.documentElement,meta=document.querySelector('meta[name=theme-color]');
+ const tr=k=>{try{return window.i18n?window.i18n.t(k):''}catch(e){return ''}};
+ function paint(){
+  const dark=root.dataset.theme==='dark';
+  if(meta)meta.content=dark?'#26272b':'#e4e4e2';
+  document.querySelectorAll('.theme-toggle').forEach(b=>{
+   b.textContent=dark?'\u2600\uFE0E':'\u263E';
+   const label=(tr(dark?'themeToLight':'themeToDark'))||(dark?'Switch to light mode':'Switch to dark mode');
+   b.title=label;b.setAttribute('aria-label',label);b.setAttribute('aria-pressed',String(dark));
+  });
+ }
+ function set(t){root.dataset.theme=t;try{localStorage.setItem(KEY,t)}catch(e){}paint()}
+ document.addEventListener('click',e=>{if(e.target.closest('.theme-toggle'))set(root.dataset.theme==='dark'?'light':'dark')});
+ const sel=document.getElementById('languageSelect');if(sel)sel.addEventListener('change',()=>setTimeout(paint,0));   // tooltip follows the language
+ window.chrolloTheme={sync:paint};paint();addEventListener('load',paint);})();
+</script>
+<script>
 // PUNCH = LED screen effect on/off (remembered on this device when storage is available)
 (()=>{const b=document.getElementById('ledToggle'),s=document.getElementById('stage');let on=true;
  try{on=localStorage.getItem('chrollo-led')!=='0'}catch(e){}
@@ -168,19 +200,19 @@ body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
 const messages={"ja":{"followDeveloper":"開発者のXをフォローする","pageTitle":"クロロを殴る — 4種類のパンチ","languageLabel":"🌐 言語","imageAlt":"クロロ","youtubeFrameTitle":"YouTubeの曲","leftPunch":"左パンチ","rightPunch":"右パンチ","musicOpen":"♫ 好きな曲を流す","musicClose":"♫ 曲の操作を閉じる","loading":"読み込み中…","videoLoading":"映像を読み込み中…","loadError":"読み込めませんでした。ページを再読み込みしてください。","keyboardHint":"PC：W/S/X 正面・Q/A/Z 左・E/D/C 右・R/F/V アッパー","musicHeader":"URLで好きな曲を流す","urlLabel":"YouTube／音声・動画のURL","loadUrl":"URLを読み込む","play":"▶ 再生","pause":"一時停止","stop":"停止","volume":"音量","musicInitial":"曲のURLを貼り付けて「URLを読み込む」を押してください。","helpText":"曲はパンチ中も再生できます。YouTubeは動画内の再生ボタンで操作できます。画面録画はiPhoneの画面収録を使ってください。","nowPlayingDefault":"再生中の曲","nowPlayingYoutube":"再生中：YouTube","nowPlayingUrl":"再生中：URLの音声・動画","invalidUrl":"http:// または https:// で始まるURLを入力してください。","youtubeVideoRequired":"YouTubeの「動画」を開き、共有ボタンから動画URLをコピーしてください。","youtubeLoaded":"YouTubeを読み込みました。動画内の▶で再生できます。音量は動画または端末側で調整してください。","directLoading":"読み込み中… 再生できない場合は直接アクセスできる音楽・動画URLを使ってください。","directPlaying":"再生中：動画と音声は同じプレーヤーで同期しています。","directLoadedPause":"読み込みました。「▶ 再生」を押してください。対応形式・配信元の制限で再生できない場合もあります。","playFailed":"再生に失敗しました。URLとファイル形式を確認してください。","youtubePressPlay":"再生できない場合はYouTube動画内の▶を押してください。","stopped":"停止しました。","youtubeVolumeLimit":"一部のiPhoneではYouTubeの音量調整が制限されます。その場合は端末の音量ボタンを使ってください。","directError":"このURLは直接再生できません。音声・動画ファイルを直接返すURLを使ってください。","volumeMusic":"曲の音量","volumePunch":"パンチ音量","volumeDevice":"端末側","iosMusicVolumeHelp":"iPhone・iPadではYouTubeやURL動画の音量をWebページ側で調整できません。端末の音量ボタンを使ってください。パンチ音量は下のバーで調整できます。","youtubeApiUnavailable":"YouTubeの音量操作を読み込めませんでした。動画内の操作または端末の音量ボタンをご利用ください。","youtubeIosVolume":"YouTubeを読み込み中。iPhoneの音楽音量は端末の音量ボタンで調整してください。","frontPunch":"正面パンチ","bodyPunch":"アッパー","readyText":"攻撃ボタンを押してスタート！","waitingText":"次の攻撃を待機中","hitText":"攻撃中…","errorText":"動画を再生できません。もう一度押してください。","unofficialNotice":"※本作は非公式のファンメイド作品です。原作者・出版社・アニメ制作会社とは関係ありません。"},"en":{"followDeveloper":"Follow the developer on X","pageTitle":"Punch Chrollo — Four Attacks","languageLabel":"🌐 Language","imageAlt":"Chrollo","youtubeFrameTitle":"YouTube music player","leftPunch":"LEFT PUNCH","rightPunch":"RIGHT PUNCH","musicOpen":"♫ Play your music","musicClose":"♫ Hide music controls","loading":"Loading…","videoLoading":"Loading animation…","loadError":"Could not load the game. Please refresh the page.","keyboardHint":"PC: W/S/X front · Q/A/Z left · E/D/C right · R/F/V uppercut","musicHeader":"Play music from a URL","urlLabel":"YouTube or direct audio/video URL","loadUrl":"Load URL","play":"▶ Play","pause":"Pause","stop":"Stop","volume":"Volume","musicInitial":"Paste a music URL and tap “Load URL”.","helpText":"Music keeps playing while you punch. For YouTube, use the play button inside the video. To record, use your phone’s built-in screen recorder.","nowPlayingDefault":"Now playing","nowPlayingYoutube":"Now playing: YouTube","nowPlayingUrl":"Now playing: URL audio/video","invalidUrl":"Enter a URL that starts with http:// or https://.","youtubeVideoRequired":"Open a YouTube video and copy its video link using Share.","youtubeLoaded":"YouTube loaded. Tap ▶ inside the video to play. Adjust volume in the player or on your device.","directLoading":"Loading… If it does not play, use a direct audio or video file URL.","directPlaying":"Playing: video and audio are synchronized in the same player.","directLoadedPause":"Loaded. Press “▶ Play”. Playback may be restricted by format or host.","playFailed":"Playback failed. Check the URL and file format.","youtubePressPlay":"If playback does not start, tap ▶ inside the YouTube video.","stopped":"Stopped.","youtubeVolumeLimit":"Some iPhones restrict YouTube volume control. Use the device volume buttons instead.","directError":"This URL cannot be played directly. Use a direct link to an audio or video file.","volumeMusic":"Music volume","volumePunch":"Punch SFX volume","volumeDevice":"Device","iosMusicVolumeHelp":"On iPhone/iPad, web sliders cannot change YouTube or direct-video volume. Use your device’s volume buttons. You can still adjust punch sounds below.","youtubeApiUnavailable":"Could not load the YouTube volume controller. Use the video controls or your device’s volume buttons.","youtubeIosVolume":"Loading YouTube. On iPhone, adjust music volume with your device’s buttons.","frontPunch":"FRONT PUNCH","bodyPunch":"UPPERCUT","readyText":"Tap a punch to start!","waitingText":"Waiting for your next punch","hitText":"Punching…","errorText":"Video could not play. Tap again.","unofficialNotice":"Unofficial fan-made game. Not affiliated with the original creator, publisher, or anime production companies."},"zh":{"followDeveloper":"在 X 上关注开发者","pageTitle":"拳打库洛洛 — 四种攻击","languageLabel":"🌐 语言","imageAlt":"库洛洛","youtubeFrameTitle":"YouTube 音乐播放器","leftPunch":"左拳","rightPunch":"右拳","musicOpen":"♫ 播放喜欢的音乐","musicClose":"♫ 收起音乐控制","loading":"加载中…","videoLoading":"正在加载动画…","loadError":"加载失败，请刷新页面重试。","keyboardHint":"电脑：W/S/X 正面 · Q/A/Z 左 · E/D/C 右 · R/F/V 上勾拳","musicHeader":"通过链接播放音乐","urlLabel":"YouTube 或音频／视频直链","loadUrl":"加载链接","play":"▶ 播放","pause":"暂停","stop":"停止","volume":"音量","musicInitial":"粘贴音乐链接，然后点击“加载链接”。","helpText":"出拳时音乐也会继续播放。YouTube 视频请使用视频内的播放按钮。录屏请使用手机自带的屏幕录制功能。","nowPlayingDefault":"正在播放","nowPlayingYoutube":"正在播放：YouTube","nowPlayingUrl":"正在播放：链接音频／视频","invalidUrl":"请输入以 http:// 或 https:// 开头的链接。","youtubeVideoRequired":"请打开 YouTube 视频，通过分享功能复制视频链接。","youtubeLoaded":"YouTube 已加载。请点击视频内的 ▶ 播放。音量可通过播放器或设备调整。","directLoading":"加载中… 如无法播放，请使用音频或视频文件的直链。","directPlaying":"正在播放：音频与视频由同一播放器同步播放。","directLoadedPause":"已加载，请点击“▶ 播放”。文件格式或网站限制可能导致无法播放。","playFailed":"播放失败，请检查链接和文件格式。","youtubePressPlay":"如果无法播放，请点击 YouTube 视频内的 ▶。","stopped":"已停止。","youtubeVolumeLimit":"部分 iPhone 无法直接调节 YouTube 音量，请使用设备音量键。","directError":"无法直接播放此链接，请使用直接指向音频或视频文件的链接。","volumeMusic":"音乐音量","volumePunch":"拳击音效音量","volumeDevice":"设备控制","iosMusicVolumeHelp":"在 iPhone/iPad 上，网页滑块无法调节 YouTube 或视频音量。请使用设备音量键。下方仍可调节拳击音效音量。","youtubeApiUnavailable":"无法加载 YouTube 音量控制。请使用视频控件或设备音量键。","youtubeIosVolume":"正在加载 YouTube。iPhone 请使用设备音量键调节音乐音量。","frontPunch":"正面拳","bodyPunch":"上勾拳","readyText":"点击按钮开始攻击！","waitingText":"等待下一次攻击","hitText":"攻击中…","errorText":"视频播放失败，请再试一次。","unofficialNotice":"※本游戏为非官方粉丝创作作品，与原作者、出版社及动画制作公司无关。"},"ko":{"followDeveloper":"개발자 X 팔로우하기","pageTitle":"클로로 때리기 — 4가지 펀치","languageLabel":"🌐 언어","imageAlt":"클로로","youtubeFrameTitle":"YouTube 음악 플레이어","leftPunch":"왼쪽 펀치","rightPunch":"오른쪽 펀치","musicOpen":"♫ 원하는 음악 재생","musicClose":"♫ 음악 설정 닫기","loading":"불러오는 중…","videoLoading":"애니메이션을 불러오는 중…","loadError":"게임을 불러오지 못했습니다. 페이지를 새로고침해 주세요.","keyboardHint":"PC: W/S/X 정면 · Q/A/Z 왼쪽 · E/D/C 오른쪽 · R/F/V 어퍼컷","musicHeader":"URL로 원하는 음악 재생","urlLabel":"YouTube 또는 오디오·동영상 URL","loadUrl":"URL 불러오기","play":"▶ 재생","pause":"일시정지","stop":"정지","volume":"음량","musicInitial":"음악 URL을 붙여넣고 ‘URL 불러오기’를 눌러 주세요.","helpText":"펀치하는 동안에도 음악이 계속 재생됩니다. YouTube는 영상 안의 재생 버튼을 이용해 주세요. 녹화는 휴대폰의 화면 녹화 기능을 사용하세요.","nowPlayingDefault":"재생 중인 음악","nowPlayingYoutube":"재생 중: YouTube","nowPlayingUrl":"재생 중: URL 오디오·동영상","invalidUrl":"http:// 또는 https:// 로 시작하는 URL을 입력해 주세요.","youtubeVideoRequired":"YouTube 동영상을 열고 공유 버튼으로 동영상 URL을 복사해 주세요.","youtubeLoaded":"YouTube를 불러왔습니다. 영상 안의 ▶ 버튼으로 재생하세요. 음량은 플레이어나 기기에서 조절하세요.","directLoading":"불러오는 중… 재생되지 않으면 오디오·동영상 파일의 직접 URL을 사용하세요.","directPlaying":"재생 중: 하나의 플레이어에서 영상과 소리가 동기화됩니다.","directLoadedPause":"불러왔습니다. ‘▶ 재생’을 누르세요. 형식이나 제공 사이트의 제한으로 재생되지 않을 수 있습니다.","playFailed":"재생에 실패했습니다. URL과 파일 형식을 확인해 주세요.","youtubePressPlay":"재생되지 않으면 YouTube 영상 안의 ▶ 버튼을 눌러 주세요.","stopped":"정지했습니다.","youtubeVolumeLimit":"일부 iPhone에서는 YouTube 음량 조절이 제한됩니다. 기기의 음량 버튼을 사용해 주세요.","directError":"이 URL은 직접 재생할 수 없습니다. 오디오나 동영상 파일을 직접 가리키는 URL을 사용해 주세요.","volumeMusic":"음악 음량","volumePunch":"펀치 효과음 음량","volumeDevice":"기기 조절","iosMusicVolumeHelp":"iPhone/iPad에서는 웹 슬라이더로 YouTube나 동영상 음량을 조절할 수 없습니다. 기기의 음량 버튼을 사용하세요. 아래에서 펀치 효과음은 조절할 수 있습니다.","youtubeApiUnavailable":"YouTube 음량 조절 기능을 불러오지 못했습니다. 동영상 조작부나 기기의 음량 버튼을 이용하세요.","youtubeIosVolume":"YouTube를 불러오는 중입니다. iPhone에서는 기기 버튼으로 음악 음량을 조절하세요.","frontPunch":"정면 펀치","bodyPunch":"어퍼컷","readyText":"버튼을 눌러 시작하세요!","waitingText":"다음 펀치를 기다리는 중","hitText":"공격 중…","errorText":"동영상을 재생할 수 없습니다. 다시 눌러 주세요.","unofficialNotice":"※본 게임은 비공식 팬 제작 작품이며, 원작자·출판사·애니메이션 제작사와 관계가 없습니다."}};
 // Credit line and legal notice at the bottom of the game page (the credit sentence is split around its link word).
 const extra={
- ja:{creditBefore:'非公式のファン改造 · 原作ゲームのクレジット：',creditLink:'開発者 ↗',creditAfter:' · カスタマイズ：bublaaaaa',
+ ja:{themeToDark:'ダークモードにする',themeToLight:'ライトモードにする',creditBefore:'非公式のファン改造 · 原作ゲームのクレジット：',creditLink:'開発者 ↗',creditAfter:' · カスタマイズ：bublaaaaa',
   legalP1:'これは個人的なカスタマイズのために作成された、独立した非公式の改変です。原作の開発者、著作権者、出版社、アニメ制作会社とは提携・承認・後援の関係はありません。',
   legalP2:'原作ゲーム、キャラクター、アートワークその他の保護対象の素材に関するすべての権利は、それぞれの権利者に帰属します。',
   legalCreator:'原作者：',legalGame:'原作ゲーム ↗'},
- en:{creditBefore:'Unofficial fan modification · Original game credited to its ',creditLink:'developer ↗',creditAfter:' · Customization by bublaaaaa',
+ en:{themeToDark:'Switch to dark mode',themeToLight:'Switch to light mode',creditBefore:'Unofficial fan modification · Original game credited to its ',creditLink:'developer ↗',creditAfter:' · Customization by bublaaaaa',
   legalP1:'This is an independent, unofficial modification created for personal customization. It is not affiliated with, endorsed by, or sponsored by the original developer, copyright holders, publisher, or anime production companies.',
   legalP2:'All rights to the original game, characters, artwork, and other protected materials remain with their respective owners.',
   legalCreator:'Original creator: ',legalGame:'Original game ↗'},
- zh:{creditBefore:'非官方粉丝改版 · 原版游戏归功于其',creditLink:'开发者 ↗',creditAfter:' · 定制：bublaaaaa',
+ zh:{themeToDark:'切换到深色模式',themeToLight:'切换到浅色模式',creditBefore:'非官方粉丝改版 · 原版游戏归功于其',creditLink:'开发者 ↗',creditAfter:' · 定制：bublaaaaa',
   legalP1:'这是为个人定制而制作的独立非官方改版，与原开发者、版权持有者、出版社或动画制作公司无任何关联，也未获其认可或赞助。',
   legalP2:'原版游戏、角色、美术作品及其他受保护素材的一切权利均归各自所有者所有。',
   legalCreator:'原作者：',legalGame:'原版游戏 ↗'},
- ko:{creditBefore:'비공식 팬 개조 · 원작 게임 크레딧: ',creditLink:'개발자 ↗',creditAfter:' · 커스터마이징: bublaaaaa',
+ ko:{themeToDark:'다크 모드로 전환',themeToLight:'라이트 모드로 전환',creditBefore:'비공식 팬 개조 · 원작 게임 크레딧: ',creditLink:'개발자 ↗',creditAfter:' · 커스터마이징: bublaaaaa',
   legalP1:'이 프로젝트는 개인적인 커스터마이징을 위해 만든 독립적인 비공식 수정본이며, 원 개발자, 저작권자, 출판사 또는 애니메이션 제작사와 제휴·승인·후원 관계가 없습니다.',
   legalP2:'원작 게임, 캐릭터, 아트워크 및 기타 보호 대상 자료에 대한 모든 권리는 각 권리자에게 있습니다.',
   legalCreator:'원작자: ',legalGame:'원작 게임 ↗'}
@@ -703,14 +735,14 @@ const css=document.createElement('style');
 css.textContent=`
 /* edit page: same soft plastic as the game page (variables come from body[data-page=edit] in index.html) */
 #editPage{width:100%;max-width:1100px;padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) 48px;gap:clamp(12px,3vw,18px);align-items:center;color:var(--ink)}
-.ed-top{width:100%;display:flex;align-items:center;gap:14px}.ed-top h2{margin:0;font-size:clamp(15px,4vw,19px);color:var(--ink);text-shadow:0 1px 0 #fff}
-.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bg);border-radius:999px;box-shadow:var(--raise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 #fff}
+.ed-top{width:100%;display:flex;align-items:center;gap:14px}.ed-top h2{margin:0;font-size:clamp(15px,4vw,19px);color:var(--ink);text-shadow:0 1px 0 var(--hi)}
+.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bg);border-radius:999px;box-shadow:var(--raise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 var(--hi)}
 .ed-back:active{box-shadow:var(--sink-s)}.ed-back:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 .ed-layout{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,3vw,22px);align-items:start}
 @media(min-width:900px){.ed-layout{grid-template-columns:minmax(0,500px) minmax(0,1fr)}}
 .ed-tools{display:flex;flex-direction:column;gap:clamp(14px,3vw,22px);min-width:0}
 .ed-card{padding:clamp(14px,3.5vw,22px);border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
-.ed-card h3{margin:0 0 8px;font-size:17px;color:var(--ink);text-shadow:0 1px 0 #fff}
+.ed-card h3{margin:0 0 8px;font-size:17px;color:var(--ink);text-shadow:0 1px 0 var(--hi)}
 #editPage p{margin:8px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
 .ed-hint{margin:8px 0 12px!important}
 
@@ -722,18 +754,18 @@ css.textContent=`
 .ed-frames{margin-top:12px}
 .ed-frames-top{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 8px}
 .ed-counter{display:flex;align-items:baseline;gap:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}
-.ed-counter b{font-size:clamp(22px,6vw,30px);font-weight:800;letter-spacing:.04em;line-height:1;text-shadow:0 1px 0 #fff}
+.ed-counter b{font-size:clamp(22px,6vw,30px);font-weight:800;letter-spacing:.04em;line-height:1;text-shadow:0 1px 0 var(--hi)}
 .ed-counter span{font-size:13px;font-weight:700;color:var(--ink-soft)}
-.ed-frames-label{font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 0 #fff}
+.ed-frames-label{font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 0 var(--hi)}
 .ed-ticks{display:flex;gap:2px;height:30px;padding:0 2px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
-.ed-ticks i{flex:1;min-width:0;border-radius:2px;background:rgba(0,0,0,.16);transition:background .08s}
-.ed-ticks i.on{background:#2e2e2b}.ed-ticks i.cur{background:#ff5a3c;transform:scaleY(1.2)}
+.ed-ticks i{flex:1;min-width:0;border-radius:2px;background:var(--tick);transition:background .08s}
+.ed-ticks i.on{background:var(--tick-on)}.ed-ticks i.cur{background:#ff5a3c;transform:scaleY(1.2)}
 .ed-ticks i.ed{box-shadow:inset 0 5px 0 #ff9f1c}.ed-ticks i.fv{box-shadow:inset 0 -5px 0 #38bdf8}.ed-ticks i.ed.fv{box-shadow:inset 0 5px 0 #ff9f1c,inset 0 -5px 0 #38bdf8}
 .ed-ticks:focus-visible{outline:2px solid #6d7cff;outline-offset:4px;border-radius:6px}
 #edSel{margin:10px 4px 0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)!important}
 #edNote{min-height:1.2em;margin:8px 4px 0!important}
 .ed-play{margin:10px 0 0;gap:10px;flex-wrap:nowrap!important}
-#editPage .ed-play label{margin:0;font-size:14px;font-weight:700;color:var(--ink);flex:0 0 auto;text-shadow:0 1px 0 #fff}
+#editPage .ed-play label{margin:0;font-size:14px;font-weight:700;color:var(--ink);flex:0 0 auto;text-shadow:0 1px 0 var(--hi)}
 #edMove{flex:1 1 0;max-width:220px;box-sizing:border-box;height:42px;min-width:0;padding:0 16px;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--sink-s)}
 #edMove:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 /* narrow screens: a compact pinned bar (small preview + Move menu + Play) so the sliders stay visible below it */
@@ -784,10 +816,10 @@ css.textContent=`
 }
 
 /* buttons: raised pills that sink when pressed */
-#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--raise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 #fff;transition:box-shadow .08s}
+#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--raise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
 #editPage .ed-btn:active,#editPage button:active{box-shadow:var(--sink-s)}
 #editPage .ed-btn:focus-within,#editPage button:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
-#editPage #edPlayBtn{flex:0 0 auto;color:#1d2f55;background:linear-gradient(145deg,#eaf0ff,#d2dcf4)}
+#editPage #edPlayBtn{flex:0 0 auto;color:var(--play-ink);background:linear-gradient(145deg,var(--play-a),var(--play-b))}
 #edActions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 #editPage #edActions .ed-btn,#editPage #edActions button{width:100%;height:auto;min-height:42px;padding:8px 12px;white-space:normal;text-align:center;line-height:1.2}
 
@@ -803,28 +835,39 @@ css.textContent=`
 #editPage #edInfo .ed-infobody p{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
 .ed-card .ed-drop{margin:12px 0 0}.ed-card .ed-drop+.ed-drop{margin-top:10px}
 .ed-drop{margin:0 0 4px;border-radius:22px;background:var(--bg);box-shadow:var(--raise-s)}
-.ed-drop summary{list-style:none;display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 20px;font-size:14px;font-weight:800;color:var(--ink);cursor:pointer;user-select:none;text-shadow:0 1px 0 #fff}
+.ed-drop summary{list-style:none;display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 20px;font-size:14px;font-weight:800;color:var(--ink);cursor:pointer;user-select:none;text-shadow:0 1px 0 var(--hi)}
 .ed-drop summary::-webkit-details-marker{display:none}
 .ed-drop summary::after{content:"\\25BE";transition:transform .15s;color:var(--ink-soft)}.ed-drop[open] summary::after{transform:rotate(180deg)}
 .ed-drop summary:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:22px}
 .ed-drop[open]{box-shadow:var(--sink-s)}
-.ed-ctl{display:flex;flex-direction:column;gap:12px;padding:6px 20px 20px}.ed-ctl h4{margin:0;font-size:13px;color:var(--ink);font-weight:800;text-shadow:0 1px 0 #fff}
-.ed-ctl h4.ed-sep{margin-top:10px;padding-top:16px;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -1px 0 rgba(255,255,255,.9)}
+.ed-ctl{display:flex;flex-direction:column;gap:12px;padding:6px 20px 20px}.ed-ctl h4{margin:0;font-size:13px;color:var(--ink);font-weight:800;text-shadow:0 1px 0 var(--hi)}
+.ed-ctl .ed-sep{margin-top:10px;padding-top:16px;border-top:1px solid var(--line);box-shadow:0 -1px 0 var(--hi2)}
+/* "This move: Front ▾" is itself the move chooser (an invisible <select> lies on top); Global is a button on the right */
+.ed-movehead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ed-pick{position:relative;display:inline-flex;align-items:center;gap:6px;padding:6px 2px;font-size:13px;font-weight:800;color:var(--ink);text-shadow:0 1px 0 var(--hi);cursor:pointer;border-radius:8px}
+.ed-pick::after{content:"\\25BE";font-size:1.15em;line-height:1;color:var(--ink-soft)}
+.ed-pick select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
+.ed-pick:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
+.ed-movehead.global .ed-pick{opacity:.6}
+main#editPage #edGlobalBtn{height:30px;min-width:0;padding:0 14px;font-size:12px;flex:0 0 auto}
+main#editPage #edGlobalBtn[aria-pressed=true]{box-shadow:var(--sink-s);color:var(--ink-strong)}
 .ed-slider{display:grid;grid-template-columns:112px minmax(0,1fr) 54px;gap:12px;align-items:center}
 .ed-slider span{font-size:13px;color:var(--ink-soft)}.ed-slider output{font-size:13px;font-weight:700;color:var(--ink);text-align:right}
 .ed-slider input{-webkit-appearance:none;appearance:none;width:100%;height:14px;margin:0;border-radius:999px;background:var(--bg);box-shadow:var(--sink-s);cursor:pointer}
-.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,#f6f6f4,#dcdcda);box-shadow:var(--raise-s)}
-.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,#f6f6f4,#dcdcda);box-shadow:var(--raise-s)}
+.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
+.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
 .ed-slider input:disabled{opacity:.35;cursor:default}
 .ed-slider input:focus-visible{outline:2px solid #6d7cff;outline-offset:4px}
 #edPicker{width:100%;display:block;border-radius:16px;cursor:pointer;background:#000;margin:14px 0 6px;box-shadow:var(--raise-s)}
 
 /* sounds */
 .ed-sfx{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto auto;gap:10px;align-items:center;padding:12px 14px;border-radius:20px;box-shadow:var(--sink-s)}
-.ed-sfx .ed-name{grid-column:1/-1;font-weight:800;font-size:14px;color:var(--ink);text-shadow:0 1px 0 #fff}.ed-sfx .ed-file{min-width:0;font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-sfx .ed-name{grid-column:1/-1;font-weight:800;font-size:14px;color:var(--ink);text-shadow:0 1px 0 var(--hi)}.ed-sfx .ed-file{min-width:0;font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:480px){.ed-sfx .ed-btn,.ed-sfx button{padding:0 12px!important;font-size:13px!important}
  .ed-slider{grid-template-columns:78px minmax(0,1fr) 40px;gap:8px}.ed-slider span{font-size:12px}.ed-slider output{font-size:12px}.ed-ctl{padding:4px 14px 16px}}
 
+main#editPage button.theme-toggle{margin-left:auto;width:36px;height:36px;min-width:36px;padding:0;font-size:15px;border-radius:50%}
+@media(max-width:560px){main#editPage button.theme-toggle{width:30px;height:30px;min-width:30px;font-size:13px}}
 /* Sample list on the game page (dark fallback; index.html restyles it for the game page) */
 .ed-sample{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));z-index:5;box-sizing:border-box;height:40px;max-width:calc(100vw - 120px);padding:0 14px;font:inherit;font-weight:700;font-size:14px;color:#fff;background:#30303a;border:1px solid #666;border-radius:999px;box-shadow:0 2px 10px #0008;cursor:pointer}.ed-sample option{background:#1c1c22;color:#fff}
 `;
@@ -832,8 +875,9 @@ document.head.append(css);
 const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
 const slider=(id,label,min,max,step)=>`<div class="ed-slider"><span>${label}</span><input type="range" id="${id}" min="${min}" max="${max}" step="${step}"><output id="${id}V"></output></div>`;
 const home=document.querySelector('main');
+const moveOpts=['front','left','right','body'].map(t=>`<option value="${t}"${t==='front'?' selected':''}>${t==='body'?'Uppercut':NAMES[t].replace(' punch','')}</option>`).join('');   // the move lists (Global is a button, not a list entry)
 const page=el(`<main id="editPage" hidden>
-<header class="ed-top"><a class="ed-back" href="#">&larr; Back to game</a><h2>Edit display &amp; sounds</h2></header>
+<header class="ed-top"><a class="ed-back" href="#">&larr; Back to game</a><h2>Edit display &amp; sounds</h2><button type="button" class="theme-toggle" aria-pressed="false">&#9790;</button></header>
 <div class="ed-layout">
  <section class="ed-live" aria-label="Live preview">
   <div class="ed-bezel"><canvas id="edPreview" width="678" height="452"></canvas></div>
@@ -842,7 +886,7 @@ const page=el(`<main id="editPage" hidden>
    <div class="ed-ticks" id="edTicks" role="slider" tabindex="0" aria-label="Frame"></div>
   </div>
   <p id="edSel"></p>
-  <div class="music-row ed-play" id="edPlay"><label for="edMove">Move</label><select id="edMove"><option value="all">Global (all moves)</option>${['front','left','right','body'].map(t=>`<option value="${t}"${t==='front'?' selected':''}>${t==='body'?'Uppercut':NAMES[t].replace(' punch','')}</option>`).join('')}</select><button type="button" id="edPlayBtn">Play sequence</button></div>
+  <div class="music-row ed-play" id="edPlay"><label for="edMove">Move</label><select id="edMove">${moveOpts}</select><button type="button" id="edPlayBtn">Play sequence</button></div>
   <p id="edNote" role="status"></p>
  </section>
  <div class="ed-tools">
@@ -863,7 +907,10 @@ const page=el(`<main id="editPage" hidden>
      ${slider('edPanY','Move vertical',-100,100,1)}
      ${slider('edPanX','Move horizontal',-100,100,1)}
      <div class="music-row" style="margin:0"><button type="button" id="edViewReset">Reset this cell</button></div>
-     <h4 class="ed-sep" id="edMoveSum">This move</h4>
+     <div class="ed-sep ed-movehead" id="edMoveHead">
+      <label class="ed-pick"><span id="edMoveSum">This move</span><select id="edMovePick" aria-label="Choose move">${moveOpts}</select></label>
+      <button type="button" id="edGlobalBtn" aria-pressed="false" title="Edit all moves at once">Global</button>
+     </div>
      <p class="ed-hint" id="edMoveHint" style="margin:0!important">Applies to every picture of the move chosen in the Move menu.</p>
      ${slider('edMZoom','Zoom',1,4,0.01)}
      ${slider('edMPanY','Move vertical',-100,100,1)}
@@ -889,7 +936,8 @@ const page=el(`<main id="editPage" hidden>
 // Ready-made full sheets (same 10x5 layout). Chosen from the list at the bottom-left of the game page.
 const SAMPLES=[{id:'gabi',label:'Gabi',file:'sample-gabi.webp'},{id:'tucker',label:'Tucker',file:'sample-tucker.webp'}];
 const sampleSel=el(`<select class="ed-sample" id="edSample" aria-label="Sample sheet"><option value="">Sample: Original</option>${SAMPLES.map(s=>`<option value="${s.id}">Sample: ${s.label}</option>`).join('')}<option value="custom" hidden>Sample: Custom sheet</option></select>`);
-document.body.append(page,sampleSel);   // the Edit button is the link in the game page's label row
+document.body.append(page,sampleSel);
+window.chrolloTheme?.sync?.();   // set the icon of the toggle in the edit page header   // the Edit button is the link in the game page's label row
 // the legal notice from the bottom of the game page is repeated at the bottom of the edit page (same text, same translations)
 const legalSrc=document.querySelector('.legal');
 if(legalSrc){page.append(legalSrc.cloneNode(true));window.i18n?.render?.()}
@@ -915,7 +963,9 @@ const bmps={},edited=new Set(),DEF={z:1,x:0,y:0},MOVES=['left','front','right','
 const freshView=()=>({moves:{},cells:{}});         // cells[i] and moves[type] = {z,x,y}
 let view=freshView();
 const viewIsDefault=()=>!Object.keys(view.moves).length&&!Object.keys(view.cells).length;
-const moveSel=()=>$('#edMove').value;
+let globalMode=false;   // the Global button: edit one view that applies to every move
+const moveSel=()=>globalMode?'all':$('#edMove').value;
+const setMove=t=>{$('#edMove').value=t;$('#edMovePick').value=t};   // both move lists always show the same move
 // which moves draw a given cell (the Move menu and the picked cell always agree)
 const movesUsing=i=>{const by=uses[i];return by?MOVES_MENU.filter(t=>by.has(NAMES[t])||by.has(NAMES[t]+' (end)')):[]};
 const applyMoveViews=()=>{for(const t of VIEW_KEYS)api.setMoveView(t,view.moves[t]||null)};
@@ -989,6 +1039,7 @@ function syncControls(){
  $('#edMZoomV').textContent=m.z.toFixed(2)+'×';$('#edMPanXV').textContent=pct(m.x);$('#edMPanYV').textContent=pct(m.y);
  $('#edMPanX').disabled=$('#edMPanY').disabled=m.z<=1;   // nothing to move until zoomed in
  const global=moveSel()==='all';
+ $('#edMovePick').value=$('#edMove').value;$('#edGlobalBtn').setAttribute('aria-pressed',String(global));$('#edMoveHead').classList.toggle('global',global);
  $('#edMoveSum').textContent=global?'Global: all moves':'This move: '+$('#edMove').selectedOptions[0].textContent;
  $('#edMoveHint').textContent=global?'Applies to every picture of every move, including the idle picture. It stacks with each move\'s own view.':'Applies to every picture of the move chosen in the Move menu above.';
 }
@@ -1011,7 +1062,7 @@ for(const ev of['pointerup','pointercancel'])ticks.addEventListener(ev,()=>{scru
 ticks.addEventListener('keydown',e=>{const d={ArrowLeft:-1,ArrowRight:1,Home:-1e9,End:1e9}[e.key];if(d){e.preventDefault();select(clamp(sel+d,0,total-1))}});
 function select(i){
  sel=i;
- const mu=movesUsing(i);if(mu.length&&moveSel()!=='all'&&!mu.includes(moveSel()))$('#edMove').value=mu[0];   // picked cell -> its move (Global stays Global)
+ const mu=movesUsing(i);if(mu.length&&moveSel()!=='all'&&!mu.includes(moveSel()))setMove(mu[0]);   // picked cell -> its move (Global stays Global)
  syncControls();drawPicker();
  $('#edSel').textContent=`Cell ${pad(i)} - used by: ${[...(uses[i]||['nothing'])].join(', ')}`;
 }
@@ -1045,10 +1096,15 @@ $('#edMZoom').addEventListener('input',e=>setMoveViewP({z:+e.target.value}));
 $('#edMPanX').addEventListener('input',e=>setMoveViewP({x:+e.target.value/100}));
 $('#edMPanY').addEventListener('input',e=>setMoveViewP({y:+e.target.value/100}));
 $('#edMoveReset').addEventListener('click',()=>{setMoveViewP({z:1});note('Move view reset.')});
-$('#edMove').addEventListener('change',()=>{
- const t=moveSel();   // picked move -> if the current cell isn't one of its pictures, jump to the move's first picture
- if(t!=='all'&&!movesUsing(sel).includes(t))select(meta.combo_frames[t][0]);else{syncControls();drawPreview()}   // Global never moves the selection
-});
+// choosing a move (from either list) leaves Global mode; if the current cell isn't one of that move's pictures, jump to its first picture
+function chooseMove(t){
+ globalMode=false;setMove(t);
+ if(!movesUsing(sel).includes(t))select(meta.combo_frames[t][0]);else{syncControls();drawPreview()}
+}
+$('#edMove').addEventListener('change',e=>chooseMove(e.target.value));
+$('#edMovePick').addEventListener('change',e=>chooseMove(e.target.value));
+// Global button: edit one view for every move (the cell you are on does not change); press again to go back to the move
+$('#edGlobalBtn').addEventListener('click',()=>{globalMode=!globalMode;syncControls();drawPreview()});
 $('#edViewResetAll').addEventListener('click',()=>{
  view=freshView();drop('view');applyMoveViews();
  if(work){renderAll();afterView()}else{syncControls();drawPicker()}
@@ -1089,7 +1145,7 @@ async function playMove(t){
  }
  if(run===playRun){cancelAnimationFrame(playRaf);playRaf=0;playhead=-1;paintTicks();drawPreview()}
 }
-$('#edPlayBtn').addEventListener('click',()=>playMove($('#edMove').value));
+$('#edPlayBtn').addEventListener('click',()=>playMove(globalMode?'all':$('#edMove').value));   // Global plays all four moves in a row
 
 const bitmap=f=>createImageBitmap(f);
 $('#edCellFile').addEventListener('change',async e=>{

@@ -34,14 +34,14 @@ const css=document.createElement('style');
 css.textContent=`
 /* edit page: same soft plastic as the game page (variables come from body[data-page=edit] in index.html) */
 #editPage{width:100%;max-width:1100px;padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) 48px;gap:clamp(12px,3vw,18px);align-items:center;color:var(--ink)}
-.ed-top{width:100%;display:flex;align-items:center;gap:14px}.ed-top h2{margin:0;font-size:clamp(15px,4vw,19px);color:var(--ink);text-shadow:0 1px 0 #fff}
-.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bg);border-radius:999px;box-shadow:var(--raise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 #fff}
+.ed-top{width:100%;display:flex;align-items:center;gap:14px}.ed-top h2{margin:0;font-size:clamp(15px,4vw,19px);color:var(--ink);text-shadow:0 1px 0 var(--hi)}
+.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bg);border-radius:999px;box-shadow:var(--raise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 var(--hi)}
 .ed-back:active{box-shadow:var(--sink-s)}.ed-back:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 .ed-layout{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,3vw,22px);align-items:start}
 @media(min-width:900px){.ed-layout{grid-template-columns:minmax(0,500px) minmax(0,1fr)}}
 .ed-tools{display:flex;flex-direction:column;gap:clamp(14px,3vw,22px);min-width:0}
 .ed-card{padding:clamp(14px,3.5vw,22px);border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
-.ed-card h3{margin:0 0 8px;font-size:17px;color:var(--ink);text-shadow:0 1px 0 #fff}
+.ed-card h3{margin:0 0 8px;font-size:17px;color:var(--ink);text-shadow:0 1px 0 var(--hi)}
 #editPage p{margin:8px 0 0;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
 .ed-hint{margin:8px 0 12px!important}
 
@@ -53,18 +53,18 @@ css.textContent=`
 .ed-frames{margin-top:12px}
 .ed-frames-top{display:flex;align-items:baseline;justify-content:space-between;margin:0 4px 8px}
 .ed-counter{display:flex;align-items:baseline;gap:7px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink)}
-.ed-counter b{font-size:clamp(22px,6vw,30px);font-weight:800;letter-spacing:.04em;line-height:1;text-shadow:0 1px 0 #fff}
+.ed-counter b{font-size:clamp(22px,6vw,30px);font-weight:800;letter-spacing:.04em;line-height:1;text-shadow:0 1px 0 var(--hi)}
 .ed-counter span{font-size:13px;font-weight:700;color:var(--ink-soft)}
-.ed-frames-label{font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 0 #fff}
+.ed-frames-label{font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;text-shadow:0 1px 0 var(--hi)}
 .ed-ticks{display:flex;gap:2px;height:30px;padding:0 2px;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}
-.ed-ticks i{flex:1;min-width:0;border-radius:2px;background:rgba(0,0,0,.16);transition:background .08s}
-.ed-ticks i.on{background:#2e2e2b}.ed-ticks i.cur{background:#ff5a3c;transform:scaleY(1.2)}
+.ed-ticks i{flex:1;min-width:0;border-radius:2px;background:var(--tick);transition:background .08s}
+.ed-ticks i.on{background:var(--tick-on)}.ed-ticks i.cur{background:#ff5a3c;transform:scaleY(1.2)}
 .ed-ticks i.ed{box-shadow:inset 0 5px 0 #ff9f1c}.ed-ticks i.fv{box-shadow:inset 0 -5px 0 #38bdf8}.ed-ticks i.ed.fv{box-shadow:inset 0 5px 0 #ff9f1c,inset 0 -5px 0 #38bdf8}
 .ed-ticks:focus-visible{outline:2px solid #6d7cff;outline-offset:4px;border-radius:6px}
 #edSel{margin:10px 4px 0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink)!important}
 #edNote{min-height:1.2em;margin:8px 4px 0!important}
 .ed-play{margin:10px 0 0;gap:10px;flex-wrap:nowrap!important}
-#editPage .ed-play label{margin:0;font-size:14px;font-weight:700;color:var(--ink);flex:0 0 auto;text-shadow:0 1px 0 #fff}
+#editPage .ed-play label{margin:0;font-size:14px;font-weight:700;color:var(--ink);flex:0 0 auto;text-shadow:0 1px 0 var(--hi)}
 #edMove{flex:1 1 0;max-width:220px;box-sizing:border-box;height:42px;min-width:0;padding:0 16px;font:inherit;font-size:14px;font-weight:700;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--sink-s)}
 #edMove:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 /* narrow screens: a compact pinned bar (small preview + Move menu + Play) so the sliders stay visible below it */
@@ -115,10 +115,10 @@ css.textContent=`
 }
 
 /* buttons: raised pills that sink when pressed */
-#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--raise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 #fff;transition:box-shadow .08s}
+#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--raise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
 #editPage .ed-btn:active,#editPage button:active{box-shadow:var(--sink-s)}
 #editPage .ed-btn:focus-within,#editPage button:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
-#editPage #edPlayBtn{flex:0 0 auto;color:#1d2f55;background:linear-gradient(145deg,#eaf0ff,#d2dcf4)}
+#editPage #edPlayBtn{flex:0 0 auto;color:var(--play-ink);background:linear-gradient(145deg,var(--play-a),var(--play-b))}
 #edActions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 #editPage #edActions .ed-btn,#editPage #edActions button{width:100%;height:auto;min-height:42px;padding:8px 12px;white-space:normal;text-align:center;line-height:1.2}
 
@@ -134,28 +134,39 @@ css.textContent=`
 #editPage #edInfo .ed-infobody p{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
 .ed-card .ed-drop{margin:12px 0 0}.ed-card .ed-drop+.ed-drop{margin-top:10px}
 .ed-drop{margin:0 0 4px;border-radius:22px;background:var(--bg);box-shadow:var(--raise-s)}
-.ed-drop summary{list-style:none;display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 20px;font-size:14px;font-weight:800;color:var(--ink);cursor:pointer;user-select:none;text-shadow:0 1px 0 #fff}
+.ed-drop summary{list-style:none;display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 20px;font-size:14px;font-weight:800;color:var(--ink);cursor:pointer;user-select:none;text-shadow:0 1px 0 var(--hi)}
 .ed-drop summary::-webkit-details-marker{display:none}
 .ed-drop summary::after{content:"\\25BE";transition:transform .15s;color:var(--ink-soft)}.ed-drop[open] summary::after{transform:rotate(180deg)}
 .ed-drop summary:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:22px}
 .ed-drop[open]{box-shadow:var(--sink-s)}
-.ed-ctl{display:flex;flex-direction:column;gap:12px;padding:6px 20px 20px}.ed-ctl h4{margin:0;font-size:13px;color:var(--ink);font-weight:800;text-shadow:0 1px 0 #fff}
-.ed-ctl h4.ed-sep{margin-top:10px;padding-top:16px;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -1px 0 rgba(255,255,255,.9)}
+.ed-ctl{display:flex;flex-direction:column;gap:12px;padding:6px 20px 20px}.ed-ctl h4{margin:0;font-size:13px;color:var(--ink);font-weight:800;text-shadow:0 1px 0 var(--hi)}
+.ed-ctl .ed-sep{margin-top:10px;padding-top:16px;border-top:1px solid var(--line);box-shadow:0 -1px 0 var(--hi2)}
+/* "This move: Front ▾" is itself the move chooser (an invisible <select> lies on top); Global is a button on the right */
+.ed-movehead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ed-pick{position:relative;display:inline-flex;align-items:center;gap:6px;padding:6px 2px;font-size:13px;font-weight:800;color:var(--ink);text-shadow:0 1px 0 var(--hi);cursor:pointer;border-radius:8px}
+.ed-pick::after{content:"\\25BE";font-size:1.15em;line-height:1;color:var(--ink-soft)}
+.ed-pick select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
+.ed-pick:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
+.ed-movehead.global .ed-pick{opacity:.6}
+main#editPage #edGlobalBtn{height:30px;min-width:0;padding:0 14px;font-size:12px;flex:0 0 auto}
+main#editPage #edGlobalBtn[aria-pressed=true]{box-shadow:var(--sink-s);color:var(--ink-strong)}
 .ed-slider{display:grid;grid-template-columns:112px minmax(0,1fr) 54px;gap:12px;align-items:center}
 .ed-slider span{font-size:13px;color:var(--ink-soft)}.ed-slider output{font-size:13px;font-weight:700;color:var(--ink);text-align:right}
 .ed-slider input{-webkit-appearance:none;appearance:none;width:100%;height:14px;margin:0;border-radius:999px;background:var(--bg);box-shadow:var(--sink-s);cursor:pointer}
-.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,#f6f6f4,#dcdcda);box-shadow:var(--raise-s)}
-.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,#f6f6f4,#dcdcda);box-shadow:var(--raise-s)}
+.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
+.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
 .ed-slider input:disabled{opacity:.35;cursor:default}
 .ed-slider input:focus-visible{outline:2px solid #6d7cff;outline-offset:4px}
 #edPicker{width:100%;display:block;border-radius:16px;cursor:pointer;background:#000;margin:14px 0 6px;box-shadow:var(--raise-s)}
 
 /* sounds */
 .ed-sfx{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto auto;gap:10px;align-items:center;padding:12px 14px;border-radius:20px;box-shadow:var(--sink-s)}
-.ed-sfx .ed-name{grid-column:1/-1;font-weight:800;font-size:14px;color:var(--ink);text-shadow:0 1px 0 #fff}.ed-sfx .ed-file{min-width:0;font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ed-sfx .ed-name{grid-column:1/-1;font-weight:800;font-size:14px;color:var(--ink);text-shadow:0 1px 0 var(--hi)}.ed-sfx .ed-file{min-width:0;font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:480px){.ed-sfx .ed-btn,.ed-sfx button{padding:0 12px!important;font-size:13px!important}
  .ed-slider{grid-template-columns:78px minmax(0,1fr) 40px;gap:8px}.ed-slider span{font-size:12px}.ed-slider output{font-size:12px}.ed-ctl{padding:4px 14px 16px}}
 
+main#editPage button.theme-toggle{margin-left:auto;width:36px;height:36px;min-width:36px;padding:0;font-size:15px;border-radius:50%}
+@media(max-width:560px){main#editPage button.theme-toggle{width:30px;height:30px;min-width:30px;font-size:13px}}
 /* Sample list on the game page (dark fallback; index.html restyles it for the game page) */
 .ed-sample{position:fixed;left:max(14px,env(safe-area-inset-left));bottom:max(14px,env(safe-area-inset-bottom));z-index:5;box-sizing:border-box;height:40px;max-width:calc(100vw - 120px);padding:0 14px;font:inherit;font-weight:700;font-size:14px;color:#fff;background:#30303a;border:1px solid #666;border-radius:999px;box-shadow:0 2px 10px #0008;cursor:pointer}.ed-sample option{background:#1c1c22;color:#fff}
 `;
@@ -163,8 +174,9 @@ document.head.append(css);
 const el=h=>{const t=document.createElement('template');t.innerHTML=h.trim();return t.content.firstChild};
 const slider=(id,label,min,max,step)=>`<div class="ed-slider"><span>${label}</span><input type="range" id="${id}" min="${min}" max="${max}" step="${step}"><output id="${id}V"></output></div>`;
 const home=document.querySelector('main');
+const moveOpts=['front','left','right','body'].map(t=>`<option value="${t}"${t==='front'?' selected':''}>${t==='body'?'Uppercut':NAMES[t].replace(' punch','')}</option>`).join('');   // the move lists (Global is a button, not a list entry)
 const page=el(`<main id="editPage" hidden>
-<header class="ed-top"><a class="ed-back" href="#">&larr; Back to game</a><h2>Edit display &amp; sounds</h2></header>
+<header class="ed-top"><a class="ed-back" href="#">&larr; Back to game</a><h2>Edit display &amp; sounds</h2><button type="button" class="theme-toggle" aria-pressed="false">&#9790;</button></header>
 <div class="ed-layout">
  <section class="ed-live" aria-label="Live preview">
   <div class="ed-bezel"><canvas id="edPreview" width="678" height="452"></canvas></div>
@@ -173,7 +185,7 @@ const page=el(`<main id="editPage" hidden>
    <div class="ed-ticks" id="edTicks" role="slider" tabindex="0" aria-label="Frame"></div>
   </div>
   <p id="edSel"></p>
-  <div class="music-row ed-play" id="edPlay"><label for="edMove">Move</label><select id="edMove"><option value="all">Global (all moves)</option>${['front','left','right','body'].map(t=>`<option value="${t}"${t==='front'?' selected':''}>${t==='body'?'Uppercut':NAMES[t].replace(' punch','')}</option>`).join('')}</select><button type="button" id="edPlayBtn">Play sequence</button></div>
+  <div class="music-row ed-play" id="edPlay"><label for="edMove">Move</label><select id="edMove">${moveOpts}</select><button type="button" id="edPlayBtn">Play sequence</button></div>
   <p id="edNote" role="status"></p>
  </section>
  <div class="ed-tools">
@@ -194,7 +206,10 @@ const page=el(`<main id="editPage" hidden>
      ${slider('edPanY','Move vertical',-100,100,1)}
      ${slider('edPanX','Move horizontal',-100,100,1)}
      <div class="music-row" style="margin:0"><button type="button" id="edViewReset">Reset this cell</button></div>
-     <h4 class="ed-sep" id="edMoveSum">This move</h4>
+     <div class="ed-sep ed-movehead" id="edMoveHead">
+      <label class="ed-pick"><span id="edMoveSum">This move</span><select id="edMovePick" aria-label="Choose move">${moveOpts}</select></label>
+      <button type="button" id="edGlobalBtn" aria-pressed="false" title="Edit all moves at once">Global</button>
+     </div>
      <p class="ed-hint" id="edMoveHint" style="margin:0!important">Applies to every picture of the move chosen in the Move menu.</p>
      ${slider('edMZoom','Zoom',1,4,0.01)}
      ${slider('edMPanY','Move vertical',-100,100,1)}
@@ -220,7 +235,8 @@ const page=el(`<main id="editPage" hidden>
 // Ready-made full sheets (same 10x5 layout). Chosen from the list at the bottom-left of the game page.
 const SAMPLES=[{id:'gabi',label:'Gabi',file:'sample-gabi.webp'},{id:'tucker',label:'Tucker',file:'sample-tucker.webp'}];
 const sampleSel=el(`<select class="ed-sample" id="edSample" aria-label="Sample sheet"><option value="">Sample: Original</option>${SAMPLES.map(s=>`<option value="${s.id}">Sample: ${s.label}</option>`).join('')}<option value="custom" hidden>Sample: Custom sheet</option></select>`);
-document.body.append(page,sampleSel);   // the Edit button is the link in the game page's label row
+document.body.append(page,sampleSel);
+window.chrolloTheme?.sync?.();   // set the icon of the toggle in the edit page header   // the Edit button is the link in the game page's label row
 // the legal notice from the bottom of the game page is repeated at the bottom of the edit page (same text, same translations)
 const legalSrc=document.querySelector('.legal');
 if(legalSrc){page.append(legalSrc.cloneNode(true));window.i18n?.render?.()}
@@ -246,7 +262,9 @@ const bmps={},edited=new Set(),DEF={z:1,x:0,y:0},MOVES=['left','front','right','
 const freshView=()=>({moves:{},cells:{}});         // cells[i] and moves[type] = {z,x,y}
 let view=freshView();
 const viewIsDefault=()=>!Object.keys(view.moves).length&&!Object.keys(view.cells).length;
-const moveSel=()=>$('#edMove').value;
+let globalMode=false;   // the Global button: edit one view that applies to every move
+const moveSel=()=>globalMode?'all':$('#edMove').value;
+const setMove=t=>{$('#edMove').value=t;$('#edMovePick').value=t};   // both move lists always show the same move
 // which moves draw a given cell (the Move menu and the picked cell always agree)
 const movesUsing=i=>{const by=uses[i];return by?MOVES_MENU.filter(t=>by.has(NAMES[t])||by.has(NAMES[t]+' (end)')):[]};
 const applyMoveViews=()=>{for(const t of VIEW_KEYS)api.setMoveView(t,view.moves[t]||null)};
@@ -320,6 +338,7 @@ function syncControls(){
  $('#edMZoomV').textContent=m.z.toFixed(2)+'×';$('#edMPanXV').textContent=pct(m.x);$('#edMPanYV').textContent=pct(m.y);
  $('#edMPanX').disabled=$('#edMPanY').disabled=m.z<=1;   // nothing to move until zoomed in
  const global=moveSel()==='all';
+ $('#edMovePick').value=$('#edMove').value;$('#edGlobalBtn').setAttribute('aria-pressed',String(global));$('#edMoveHead').classList.toggle('global',global);
  $('#edMoveSum').textContent=global?'Global: all moves':'This move: '+$('#edMove').selectedOptions[0].textContent;
  $('#edMoveHint').textContent=global?'Applies to every picture of every move, including the idle picture. It stacks with each move\'s own view.':'Applies to every picture of the move chosen in the Move menu above.';
 }
@@ -342,7 +361,7 @@ for(const ev of['pointerup','pointercancel'])ticks.addEventListener(ev,()=>{scru
 ticks.addEventListener('keydown',e=>{const d={ArrowLeft:-1,ArrowRight:1,Home:-1e9,End:1e9}[e.key];if(d){e.preventDefault();select(clamp(sel+d,0,total-1))}});
 function select(i){
  sel=i;
- const mu=movesUsing(i);if(mu.length&&moveSel()!=='all'&&!mu.includes(moveSel()))$('#edMove').value=mu[0];   // picked cell -> its move (Global stays Global)
+ const mu=movesUsing(i);if(mu.length&&moveSel()!=='all'&&!mu.includes(moveSel()))setMove(mu[0]);   // picked cell -> its move (Global stays Global)
  syncControls();drawPicker();
  $('#edSel').textContent=`Cell ${pad(i)} - used by: ${[...(uses[i]||['nothing'])].join(', ')}`;
 }
@@ -376,10 +395,15 @@ $('#edMZoom').addEventListener('input',e=>setMoveViewP({z:+e.target.value}));
 $('#edMPanX').addEventListener('input',e=>setMoveViewP({x:+e.target.value/100}));
 $('#edMPanY').addEventListener('input',e=>setMoveViewP({y:+e.target.value/100}));
 $('#edMoveReset').addEventListener('click',()=>{setMoveViewP({z:1});note('Move view reset.')});
-$('#edMove').addEventListener('change',()=>{
- const t=moveSel();   // picked move -> if the current cell isn't one of its pictures, jump to the move's first picture
- if(t!=='all'&&!movesUsing(sel).includes(t))select(meta.combo_frames[t][0]);else{syncControls();drawPreview()}   // Global never moves the selection
-});
+// choosing a move (from either list) leaves Global mode; if the current cell isn't one of that move's pictures, jump to its first picture
+function chooseMove(t){
+ globalMode=false;setMove(t);
+ if(!movesUsing(sel).includes(t))select(meta.combo_frames[t][0]);else{syncControls();drawPreview()}
+}
+$('#edMove').addEventListener('change',e=>chooseMove(e.target.value));
+$('#edMovePick').addEventListener('change',e=>chooseMove(e.target.value));
+// Global button: edit one view for every move (the cell you are on does not change); press again to go back to the move
+$('#edGlobalBtn').addEventListener('click',()=>{globalMode=!globalMode;syncControls();drawPreview()});
 $('#edViewResetAll').addEventListener('click',()=>{
  view=freshView();drop('view');applyMoveViews();
  if(work){renderAll();afterView()}else{syncControls();drawPicker()}
@@ -420,7 +444,7 @@ async function playMove(t){
  }
  if(run===playRun){cancelAnimationFrame(playRaf);playRaf=0;playhead=-1;paintTicks();drawPreview()}
 }
-$('#edPlayBtn').addEventListener('click',()=>playMove($('#edMove').value));
+$('#edPlayBtn').addEventListener('click',()=>playMove(globalMode?'all':$('#edMove').value));   // Global plays all four moves in a row
 
 const bitmap=f=>createImageBitmap(f);
 $('#edCellFile').addEventListener('change',async e=>{

@@ -1,4 +1,4 @@
-// Bundles site/ into one self-contained chrollo.html (works from file://, no server).
+// Bundles site/ into one self-contained punch.html (works from file://, no server).
 // Inputs: site/index.html, scripts, sheet.webp (one image sheet), three sfx wavs.
 const fs = require('fs'), path = require('path');
 const root = path.join(__dirname, '..');
@@ -25,6 +25,7 @@ html = must(html, tag('game.js'), inline(read('game.js')));
 html = must(html, tag('music.js'), inline(read('music.js')));
 html = must(html, tag('editor.js'), inline(read('editor.js')));
 
-const out = path.join(root, 'chrollo.html');
+const out = path.join(root, 'punch.html');
+try { fs.unlinkSync(out); } catch (e) {}   // Windows sometimes refuses to overwrite a file the preview server just read
 fs.writeFileSync(out, html);
-console.log('wrote', out, (fs.statSync(out).size / 1048576).toFixed(2) + ' MB');
+console.log('wrote punch.html', (fs.statSync(out).size / 1048576).toFixed(2) + ' MB');
