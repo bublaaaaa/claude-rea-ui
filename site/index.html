@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"><meta name="theme-color" content="#e4e4e2"><title>クロロを殴る</title>
+<style>
+/* ---------- base (shared with the edit page, which stays dark) ---------- */
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",system-ui,sans-serif;overscroll-behavior:none}
+body{background:#09090c;color:#fff;user-select:none;-webkit-user-select:none}
+main{max-width:1050px;min-height:100dvh;padding:12px 12px calc(24px + env(safe-area-inset-bottom));margin:auto;display:flex;flex-direction:column;align-items:center;gap:10px}
+button{font:inherit}
+[hidden]{display:none!important}
+.music-panel{width:min(100%,750px);padding:14px;background:#17171b;border:1px solid #45454d;border-radius:13px}
+.music-panel h3{margin:0 0 10px;font-size:17px}.music-panel label{display:block;font-size:13px;color:#ccc;margin-bottom:6px}
+.music-panel input[type=url]{width:100%;min-width:0;font:16px system-ui;padding:12px;background:#09090b;color:#fff;border:1px solid #666;border-radius:8px;user-select:text;-webkit-user-select:text}
+.music-panel button{font-size:14px;padding:10px 13px;background:#303039;color:#fff;border:1px solid #666;border-radius:9px;cursor:pointer}
+.music-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}.music-row .range{flex:1;min-width:100px}
+.music-panel p{font-size:12px;color:#bababa;line-height:1.55;margin:9px 0 0}#musicNote{color:#e9c995}
+
+/* ---------- game page: the whole page is the gray plastic body ---------- */
+/* soft "neumorphic" light: every raised part has a light edge top-left and a shadow bottom-right; wells are the reverse */
+body[data-page=home],body[data-page=edit]{
+ --bg:#e4e4e2;--ink:#55554f;--ink-soft:#8c8c86;--dark:rgba(155,155,148,.62);--light:rgba(255,255,255,.95);
+ --raise:7px 7px 15px var(--dark),-7px -7px 15px var(--light);
+ --raise-s:4px 4px 9px var(--dark),-4px -4px 9px var(--light);
+ --sink:inset 6px 6px 12px var(--dark),inset -6px -6px 12px var(--light);
+ --sink-s:inset 3px 3px 7px var(--dark),inset -3px -3px 7px var(--light);
+ color:var(--ink);background:linear-gradient(150deg,#ecece9 0%,var(--bg) 45%,#dcdcd9 100%) fixed}
+body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) calc(88px + env(safe-area-inset-bottom));gap:clamp(12px,3vw,18px)}
+.top{width:min(100%,600px);display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.language-bar{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-soft);white-space:nowrap}
+.language-bar label{margin:0;text-shadow:0 1px 0 #fff}
+.language-bar select{font-size:13px;font-weight:700;color:var(--ink);padding:9px 16px;border:0;border-radius:999px;background:var(--bg);box-shadow:var(--raise-s)}
+.language-bar select:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+
+.device{width:min(100%,600px)}
+.bezel{padding:clamp(10px,3vw,16px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,9px 9px 18px var(--dark),-9px -9px 18px var(--light)}
+.stage{width:100%;aspect-ratio:3 / 2;overflow:hidden;background:#100e15;border-radius:8px;position:relative;contain:paint;box-shadow:0 0 0 1px #000}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#100e15;z-index:2;pointer-events:none}
+.stage::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,0) 34%)}
+/* LED screen: a layer of round LEDs (bright centre, dark gap) with a faint red/green/blue stripe per LED.
+   The LED size follows the screen width (about 140 LEDs across, never smaller than 3px); the layer is 50% opaque. The PUNCH label switches it. */
+.bezel{container-type:inline-size}
+.stage::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;--led:max(3px,.7cqw);opacity:.5;
+ background:radial-gradient(circle at 50% 50%,rgba(0,0,0,0) 42%,rgba(0,0,0,.52) 76%) 0 0/var(--led) var(--led),
+  linear-gradient(90deg,rgba(255,50,50,.11) 0 33.3%,rgba(50,255,50,.08) 33.3% 66.6%,rgba(70,70,255,.12) 66.6% 100%) 0 0/var(--led) var(--led)}
+.stage[data-led=on] canvas{filter:saturate(1.22) contrast(1.07) brightness(1.08)}
+.stage[data-led=off]::before{display:none}
+.brand{display:flex;justify-content:space-between;align-items:center;padding:clamp(8px,2vw,12px) 4px clamp(10px,2.4vw,14px);font-weight:800;font-size:clamp(11px,2.8vw,13px);letter-spacing:.18em;color:var(--ink-soft);text-shadow:0 1px 0 #fff}
+.brand-power{appearance:none;-webkit-appearance:none;border:0;background:none;margin:-6px -8px;padding:6px 8px;border-radius:8px;font:inherit;letter-spacing:inherit;color:inherit;text-shadow:inherit;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.brand-power[aria-pressed=false]{color:#d4552d}
+.brand-power:focus-visible{outline:2px solid #6d7cff;outline-offset:2px}
+.brand-edit{display:inline-flex;align-items:center;height:32px;padding:0 16px;border-radius:999px;color:var(--ink);text-decoration:none;letter-spacing:.1em;background:var(--bg);box-shadow:var(--raise-s);transition:box-shadow .08s}
+.brand-edit:active{box-shadow:var(--sink-s)}.brand-edit:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+
+/* the pad: a sunken tray holding raised keys (three across, Uppercut wide) */
+.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,3vw,16px);padding:clamp(14px,4vw,22px);border-radius:clamp(24px,6vw,34px);background:var(--bg);box-shadow:var(--sink)}
+.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 #fff;background:linear-gradient(145deg,#eeeeec,#dedede);box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,#dcdcda,#e8e8e6);box-shadow:var(--sink-s);transform:scale(.985)}
+.attack-btn:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
+.attack-btn .key{font-weight:600;display:block;font-size:clamp(10px,2.6vw,11.5px);color:var(--ink-soft);letter-spacing:.05em}
+.attack-btn[data-attack="body"]{grid-column:1/-1;min-height:clamp(68px,19vw,84px)}
+
+.grille{display:flex;justify-content:center;gap:6px;margin:clamp(16px,4vw,26px) 0 0}
+.grille i{width:6px;height:clamp(28px,7vw,40px);border-radius:3px;background:var(--bg);box-shadow:var(--sink-s)}
+
+/* the rest of the page, in the same soft plastic */
+body[data-page=home] .unofficial-note{width:min(100%,600px);margin:0;padding:2px 10px;color:var(--ink-soft);font-size:11px;line-height:1.5;text-align:center;letter-spacing:.01em}
+body[data-page=home] footer{width:min(100%,600px);text-align:center;color:var(--ink-soft);font-size:12px;line-height:1.6}
+.legal{width:min(100%,600px);margin:100px 0 0;padding:22px 10px 0;border-top:1px solid rgba(0,0,0,.08);box-shadow:0 -1px 0 rgba(255,255,255,.85);text-align:center;user-select:text;-webkit-user-select:text}
+.legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55;color:var(--ink-soft);overflow-wrap:anywhere}
+/* Instagram: a plain text link on its own line right after the legal notice, aligned to the right (also copied to the edit page) */
+.legal .legal-foot,#editPage .legal .legal-foot{margin:10px 0 0;text-align:right}
+.legal-foot a{font-size:12px;letter-spacing:.04em}
+.legal a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.legal a:hover,.legal a:focus-visible{color:#000}.legal a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+/* the same notice (with its Instagram line) sits at the bottom of the edit page, 40px below the last card */
+#editPage .legal{width:min(100%,600px);margin:calc(40px - clamp(12px,3vw,18px)) 0 0}
+#editPage .legal p{margin:0 0 7px;font-size:10.5px;line-height:1.55}
+.credit{margin:14px 0 6px;padding:0 6px;font-size:11px;line-height:1.6;color:var(--ink-soft)}
+.credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:#000}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
+.developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:#000}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
+.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 #fff;transition:box-shadow .08s}
+.music-toggle:active,.music-toggle[aria-expanded=true]{box-shadow:var(--sink-s)}
+.music-toggle:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
+body[data-page=home] #musicPanel{width:min(100%,600px);padding:clamp(16px,4vw,22px);border:0;border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
+body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel label,body[data-page=home] #musicPanel p{color:var(--ink-soft)}
+body[data-page=home] #musicPanel #musicNote{color:#8a5a14}
+body[data-page=home] #musicPanel input[type=url]{background:var(--bg);color:var(--ink);border:0;border-radius:999px;padding:13px 18px;box-shadow:var(--sink-s)}
+body[data-page=home] #musicPanel input[type=range]{accent-color:#77776f}
+body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
+body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
+/* the song player is just the video: no card around it and no title */
+.now-playing{width:min(100%,600px);padding:0;background:none;border:0;border-radius:0;box-shadow:none}
+.now-playing-title{display:none}
+.now-playing iframe,.now-playing video{display:block;width:100%;height:185px;border:0;border-radius:8px;background:#050505;box-shadow:var(--raise-s)}.now-playing #youtubeMount{width:100%;height:185px}.now-playing #youtubeMount iframe{height:100%}.now-playing.audio-only video{height:55px}
+
+/* corner control added by editor.js (Sample list) */
+body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 #fff}
+body[data-page=home] .ed-sample option{background:#ececea;color:#33332f}
+
+@media(max-width:730px){.now-playing iframe,.now-playing video,.now-playing #youtubeMount{height:clamp(120px,34vw,180px)}.now-playing.audio-only video{height:49px}}
+
+/* phones: smaller Edit pill, smaller punch labels (still two lines), compact music controls */
+@media(max-width:560px){
+ body[data-page=home] .language-bar{font-size:10px;gap:6px}
+ body[data-page=home] .language-bar select{font-size:11.5px;padding:6px 12px}
+ body[data-page=home] .brand{padding-top:8px;padding-bottom:10px;font-size:11px}
+ body[data-page=home] .brand-edit{height:26px;padding:0 12px;font-size:11px;letter-spacing:.08em}
+ body[data-page=home] .pad{gap:9px;padding:14px}
+ body[data-page=home] .attack-btn{min-height:66px;padding:6px 4px;gap:1px;justify-content:center;align-items:center;font-size:11.5px;line-height:1.12;border-radius:16px}
+ /* labels are 9px and stay on two rows ("LEFT / PUNCH"); short labels (UPPERCUT, Japanese) stay on one line */
+ body[data-page=home] .attack-btn>span:first-child{max-width:5.6em;text-wrap:balance;font-size:9px;line-height:1.3;letter-spacing:.08em}
+ body[data-page=home] .attack-btn .key{font-size:7px;line-height:1.1;letter-spacing:.04em;text-align:center}
+ body[data-page=home] footer>span{font-size:9px}   /* the "PC: W/S/X front · Q/A/Z left …" line */
+ body[data-page=home] .attack-btn[data-attack="body"]{min-height:54px}
+ body[data-page=home] .attack-btn[data-attack="body"]>span:first-child{max-width:none}
+ body[data-page=home] .music-toggle{height:40px;font-size:13px;padding:0 16px}
+ body[data-page=home] #musicPanel{padding:14px;border-radius:22px}
+ body[data-page=home] #musicPanel h3{font-size:14px;margin-bottom:8px}
+ body[data-page=home] #musicPanel label{font-size:12px;margin-bottom:5px}
+ body[data-page=home] #musicPanel input[type=url]{padding:10px 14px;font-size:14px}
+ body[data-page=home] #musicPanel .music-row{margin-top:8px;gap:6px}
+ body[data-page=home] #musicPanel form .music-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr))}
+ body[data-page=home] #musicPanel button{height:32px;padding:0 8px;font-size:12px;line-height:1.1;white-space:normal}
+ body[data-page=home] #musicPanel form .music-row button{width:100%}
+ body[data-page=home] #musicPanel p{font-size:11px;margin-top:7px}
+ body[data-page=home] #musicPanel .music-row label{font-size:11.5px}
+ body[data-page=home] #musicPanel #punchVolumeValue{font-size:11.5px}
+}
+</style></head>
+<body data-page="home"><main>
+<header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div></header>
+<!-- the player for a loaded song sits at the top of the page; the music button and panel stay below the device -->
+<div class="now-playing" id="nowPlaying" hidden><div class="now-playing-title" id="nowPlayingTitle" data-i18n="nowPlayingDefault">再生中の曲</div><video id="musicMedia" controls playsinline preload="metadata" hidden></video><div id="youtubeMount" hidden></div></div>
+<div class="device">
+ <div class="bezel"><div class="stage" id="stage"><canvas id="gameCanvas" width="750" height="500" aria-label="パンチ映像"></canvas></div></div>
+ <div class="brand"><button type="button" class="brand-power" id="ledToggle" aria-pressed="true" title="LED screen effect: on">PUNCH</button><a class="brand-edit" href="#edit">&#9998; Edit</a></div>
+ <div class="pad" id="controls">
+  <button class="attack-btn" data-attack="left" type="button"><span data-i18n="leftPunch">左パンチ</span><span class="key">Q / A / Z</span></button>
+  <button class="attack-btn" data-attack="front" type="button"><span data-i18n="frontPunch">正面パンチ</span><span class="key">W / S / X</span></button>
+  <button class="attack-btn" data-attack="right" type="button"><span data-i18n="rightPunch">右パンチ</span><span class="key">E / D / C</span></button>
+  <button class="attack-btn" data-attack="body" type="button"><span data-i18n="bodyPunch">アッパー</span><span class="key">R / F / V</span></button>
+ </div>
+ <div class="grille" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<button class="music-toggle" type="button" id="musicToggle" aria-expanded="false" aria-controls="musicPanel" data-i18n="musicOpen">♫ 好きな曲を流す</button>
+<section class="music-panel" id="musicPanel" hidden>
+ <h3 data-i18n="musicHeader">URLで好きな曲を流す</h3><form id="musicForm"><label for="musicURL" data-i18n="urlLabel">YouTube／音声・動画のURL</label><input id="musicURL" type="url" inputmode="url" placeholder="https://youtu.be/…" required>
+ <div class="music-row"><button type="submit" id="musicLoad" data-i18n="loadUrl">URLを読み込む</button><button type="button" id="musicPlay" data-i18n="play">▶ 再生</button><button type="button" id="musicPause" data-i18n="pause">一時停止</button><button type="button" id="musicStop" data-i18n="stop">停止</button></div></form>
+ <div class="music-row"><label for="punchVolume" style="margin:0" data-i18n="volumePunch">パンチ音量</label><input class="range" id="punchVolume" type="range" min="0" max="100" step="1" value="100"><span id="punchVolumeValue">100%</span></div>
+ <p id="musicNote" role="status" data-i18n="musicInitial">曲のURLを入力してください。</p><p data-i18n="helpText">曲を流しながら攻撃できます。録画はスマホの画面収録を使ってください。</p>
+</section>
+<footer><span data-i18n="keyboardHint">PC：Q/A/Z 左・W/S/X 正面・E/D/C 右・R/F/V アッパー</span><div class="credit"><span data-i18n="creditBefore">Unofficial fan modification · Original game credited to its </span><a href="https://x.com/baga_king0" target="_blank" rel="noopener noreferrer" data-i18n="creditLink">developer &#8599;</a><span data-i18n="creditAfter"> · Customization by bublaaaaa</span></div></footer>
+<section class="legal" aria-label="Notice">
+<p data-i18n="legalP1">This is an independent, unofficial modification created for personal customization. It is not affiliated with, endorsed by, or sponsored by the original developer, copyright holders, publisher, or anime production companies.</p>
+<p data-i18n="legalP2">All rights to the original game, characters, artwork, and other protected materials remain with their respective owners.</p>
+<p><span data-i18n="legalCreator">Original creator: </span><a href="https://wild-brook-0ec1.gaba81914.workers.dev/" target="_blank" rel="noopener noreferrer" title="https://wild-brook-0ec1.gaba81914.workers.dev/" data-i18n="legalGame">Original game &#8599;</a></p>
+<p class="legal-foot"><a href="https://www.instagram.com/artsipan_" target="_blank" rel="noopener noreferrer">Instagram</a></p></section>
+</main>
+<script>
+// PUNCH = LED screen effect on/off (remembered on this device when storage is available)
+(()=>{const b=document.getElementById('ledToggle'),s=document.getElementById('stage');let on=true;
+ try{on=localStorage.getItem('chrollo-led')!=='0'}catch(e){}
+ const apply=()=>{s.dataset.led=on?'on':'off';b.setAttribute('aria-pressed',String(on));b.title='LED screen effect: '+(on?'on':'off');try{localStorage.setItem('chrollo-led',on?'1':'0')}catch(e){}};
+ b.addEventListener('click',()=>{on=!on;apply()});apply()})();
+</script>
+<script src="i18n.js"></script><script src="manifest.js"></script><script src="game.js"></script><script src="music.js"></script><script src="editor.js"></script></body></html>
