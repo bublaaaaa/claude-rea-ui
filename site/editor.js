@@ -224,7 +224,7 @@ const page=el(`<main id="editPage" hidden>
     <button type="button" id="edDownload">Download prompt</button>
     <button type="button" id="edResetImg">Reset display</button>
    </div>
-   <p style="margin:10px 0 0;text-align:left"><a href="https://github.com/bublaaaaa/punch/tree/main/sample" target="_blank" rel="noopener noreferrer" style="font-size:12px;font-weight:400;color:var(--ink-soft);white-space:nowrap;text-decoration:underline;text-underline-offset:2px">gallery &#8599;</a></p>
+   <p style="margin:10px 0 0;text-align:center"><a href="https://github.com/bublaaaaa/punch/tree/main/sample" target="_blank" rel="noopener noreferrer" style="font-size:12px;font-weight:400;color:var(--ink-soft);white-space:nowrap;text-decoration:underline;text-underline-offset:2px">gallery &#8599;</a></p>
   </section>
   <section class="ed-card">
    <h3>Sounds</h3>
