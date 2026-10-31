@@ -948,7 +948,7 @@ const page=el(`<main id="editPage" hidden>
    <div class="music-row" id="edActions" style="margin-top:10px">
     <label class="ed-btn">Replace selected cell&hellip;<input type="file" id="edCellFile" accept="image/*" hidden></label>
     <label class="ed-btn">Load whole sheet&hellip;<input type="file" id="edSheetFile" accept="image/*" hidden></label>
-    <button type="button" id="edDownload">Download sheet</button>
+    <button type="button" id="edDownload">Download prompt</button>
     <button type="button" id="edResetImg">Reset display</button>
    </div>
   </section>
@@ -1195,9 +1195,8 @@ $('#edSheetFile').addEventListener('change',async e=>{
  }catch(err){note('Could not read that image.')}
 });
 $('#edDownload').addEventListener('click',()=>{
- const w=ensureWork();
- w.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='chrollo-sheet.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000)});
- note('Sheet downloaded (with your zoom and moves applied). Edit it, keeping the grid, then use "Load whole sheet".');
+ const a=document.createElement('a');a.href='character-sequence-prompt-kit-image-swap.zip';a.download='character-sequence-prompt-kit-image-swap.zip';a.click();
+ note('Prompt kit downloaded.');
 });
 $('#edResetImg').addEventListener('click',async()=>{
  for(const i of edited){await drop('cell:'+i);bmps[i]?.close?.();delete bmps[i]}edited.clear();
