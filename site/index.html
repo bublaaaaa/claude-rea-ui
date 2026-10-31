@@ -21,6 +21,8 @@ body[data-page=home],body[data-page=edit]{
  --hi:#fff;--hi2:rgba(255,255,255,.85);--line:rgba(0,0,0,.08);--ink-strong:#000;--note:#8a5a14;--opt-bg:#ececea;--opt-ink:#33332f;
  --k1:#eeeeec;--k2:#dedede;--k3:#dcdcda;--k4:#e8e8e6;--g1:#ecece9;--g2:#dcdcd9;--tick:rgba(0,0,0,.16);--tick-on:#2e2e2b;
  --play-ink:#1d2f55;--play-a:#eaf0ff;--play-b:#d2dcf4;
+ --braise:var(--raise);--braise-s:var(--raise-s);--bsink-s:var(--sink-s);--bbg:var(--bg);
+ --tray:var(--sink);--bezel-out:9px 9px 18px var(--dark),-9px -9px 18px var(--light);--bezel-ring:0 0 0 0 transparent;   /* button look (raised / small raised / pressed / face) */
  --raise:7px 7px 15px var(--dark),-7px -7px 15px var(--light);
  --raise-s:4px 4px 9px var(--dark),-4px -4px 9px var(--light);
  --sink:inset 6px 6px 12px var(--dark),inset -6px -6px 12px var(--light);
@@ -29,9 +31,16 @@ body[data-page=home],body[data-page=edit]{
 /* dark theme: same soft shapes, light edge becomes a faint glow and the shadow gets deeper (html[data-theme=dark] is set by the head script / the toggle) */
 html[data-theme=dark] body[data-page=home],html[data-theme=dark] body[data-page=edit]{
  color-scheme:dark;
- --bg:#26272b;--ink:#d6d6d2;--ink-soft:#8a8b90;--dark:rgba(0,0,0,.6);--light:rgba(255,255,255,.06);
- --hi:rgba(0,0,0,.7);--hi2:rgba(255,255,255,.06);--line:rgba(0,0,0,.55);--ink-strong:#fff;--note:#e0b872;--opt-bg:#2f3036;--opt-ink:#dcdcd8;
- --k1:#2f3035;--k2:#232428;--k3:#212226;--k4:#2a2b30;--g1:#2b2c31;--g2:#1e1f22;--tick:rgba(255,255,255,.14);--tick-on:#d8d8d4;
+ --bg:#17181d;--ink:#d8d8d4;--ink-soft:#8d8e94;--dark:rgba(0,0,0,.85);--light:rgba(255,255,255,.06);
+ --hi:rgba(0,0,0,.75);--hi2:rgba(0,0,0,.55);--line:rgba(255,255,255,.09);--ink-strong:#fff;--note:#e0b872;--opt-bg:#202127;--opt-ink:#dcdcd8;
+ --k1:#2b2c33;--k2:#1e1f25;--k3:#1b1c21;--k4:#24252b;
+ --bbg:#202127;
+ --braise:7px 7px 16px #000,-3px -3px 12px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.16);
+ --braise-s:4px 4px 10px #000,-2px -2px 8px rgba(255,255,255,.15),inset 0 1px 0 rgba(255,255,255,.14);
+ --bsink-s:inset 3px 3px 8px #000,inset -2px -2px 6px rgba(255,255,255,.13);
+ --tray:inset 7px 7px 14px #000,inset -3px -3px 10px rgba(255,255,255,.11),0 1px 0 rgba(255,255,255,.12),0 -1px 0 rgba(0,0,0,.9);
+ --bezel-out:9px 9px 18px #000,-4px -4px 14px rgba(255,255,255,.055),0 0 0 1px rgba(255,255,255,.045);
+ --bezel-ring:0 0 0 1px rgba(255,255,255,.045);--g1:#1d1e23;--g2:#101115;--tick:rgba(255,255,255,.13);--tick-on:#d8d8d4;
  --play-ink:#d4e2ff;--play-a:#3b4768;--play-b:#2b3552}
 body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) calc(88px + env(safe-area-inset-bottom));gap:clamp(12px,3vw,18px)}
 .top{width:min(100%,600px);display:flex;align-items:center;justify-content:flex-end;gap:12px}
@@ -40,12 +49,12 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 .language-bar::after{content:"\25BE";font-size:1.15em;line-height:1}
 .language-bar:hover,.language-bar:focus-within{color:var(--ink)}.language-bar:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
 .language-bar label{margin:0;text-shadow:0 1px 0 var(--hi);pointer-events:none}
-.theme-toggle{appearance:none;-webkit-appearance:none;border:0;padding:0;width:35px;height:35px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);cursor:pointer;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s;-webkit-tap-highlight-color:transparent}
-.theme-toggle:active{box-shadow:var(--sink-s)}.theme-toggle:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+.theme-toggle{appearance:none;-webkit-appearance:none;border:0;padding:0;width:35px;height:35px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:var(--ink);background:var(--bbg);box-shadow:var(--braise-s);cursor:pointer;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s;-webkit-tap-highlight-color:transparent}
+.theme-toggle:active{box-shadow:var(--bsink-s)}.theme-toggle:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 .language-bar select{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;opacity:0;cursor:pointer;font-size:16px;-webkit-appearance:none;appearance:none}
 
 .device{width:min(100%,600px)}
-.bezel{padding:clamp(10px,3vw,16px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,9px 9px 18px var(--dark),-9px -9px 18px var(--light)}
+.bezel{padding:clamp(10px,3vw,16px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,var(--bezel-out)}
 .stage{width:100%;aspect-ratio:3 / 2;overflow:hidden;background:#100e15;border-radius:8px;position:relative;contain:paint;box-shadow:0 0 0 1px #000}
 .stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#100e15;z-index:2;pointer-events:none}
 .stage::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.13) 0%,rgba(255,255,255,0) 34%)}
@@ -61,19 +70,19 @@ body[data-page=home] main{padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) ca
 .brand-power{appearance:none;-webkit-appearance:none;border:0;background:none;margin:-6px -8px;padding:6px 8px;border-radius:8px;font:inherit;letter-spacing:inherit;color:inherit;text-shadow:inherit;cursor:pointer;transition:color .15s;-webkit-tap-highlight-color:transparent}
 .brand-power[aria-pressed=false]{color:#d4552d}
 .brand-power:focus-visible{outline:2px solid #6d7cff;outline-offset:2px}
-.brand-edit{display:inline-flex;align-items:center;height:32px;padding:0 16px;border-radius:999px;color:var(--ink);text-decoration:none;letter-spacing:.1em;background:var(--bg);box-shadow:var(--raise-s);transition:box-shadow .08s}
-.brand-edit:active{box-shadow:var(--sink-s)}.brand-edit:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+.brand-edit{display:inline-flex;align-items:center;height:32px;padding:0 16px;border-radius:999px;color:var(--ink);text-decoration:none;letter-spacing:.1em;background:var(--bbg);box-shadow:var(--braise-s);transition:box-shadow .08s}
+.brand-edit:active{box-shadow:var(--bsink-s)}.brand-edit:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 
 /* the pad: a sunken tray holding raised keys (three across, Uppercut wide) */
-.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,3vw,16px);padding:clamp(14px,4vw,22px);border-radius:clamp(24px,6vw,34px);background:var(--bg);box-shadow:var(--sink)}
-.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 var(--hi);background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
-.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,var(--k3),var(--k4));box-shadow:var(--sink-s);transform:scale(.985)}
+.pad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,3vw,16px);padding:clamp(14px,4vw,22px);border-radius:clamp(24px,6vw,34px);background:var(--bg);box-shadow:var(--tray)}
+.attack-btn{min-height:clamp(76px,22vw,96px);padding:12px 6px 10px;border:0;border-radius:clamp(18px,5vw,24px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--ink);font-weight:800;font-size:clamp(13px,3.7vw,18px);line-height:1.15;text-align:center;text-shadow:0 1px 0 var(--hi);background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--braise);transition:box-shadow .08s,transform .08s;touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.attack-btn:active,.attack-btn.pressed{background:linear-gradient(145deg,var(--k3),var(--k4));box-shadow:var(--bsink-s);transform:scale(.985)}
 .attack-btn:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 .attack-btn .key{font-weight:600;display:block;font-size:clamp(10px,2.6vw,11.5px);color:var(--ink-soft);letter-spacing:.05em}
 .attack-btn[data-attack="body"]{grid-column:1/-1;min-height:clamp(68px,19vw,84px)}
 
 .grille{display:flex;justify-content:center;gap:6px;margin:clamp(16px,4vw,26px) 0 0}
-.grille i{width:6px;height:clamp(28px,7vw,40px);border-radius:3px;background:var(--bg);box-shadow:var(--sink-s)}
+.grille i{width:6px;height:clamp(28px,7vw,40px);border-radius:3px;background:var(--bg);box-shadow:var(--bsink-s)}
 
 /* the rest of the page, in the same soft plastic */
 body[data-page=home] .unofficial-note{width:min(100%,600px);margin:0;padding:2px 10px;color:var(--ink-soft);font-size:11px;line-height:1.5;text-align:center;letter-spacing:.01em}
@@ -90,8 +99,8 @@ body[data-page=home] footer{width:min(100%,600px);text-align:center;color:var(--
 .credit{margin:14px 0 6px;padding:0 6px;font-size:11px;line-height:1.6;color:var(--ink-soft)}
 .credit a{color:var(--ink);font-weight:700;white-space:nowrap;text-decoration:underline;text-underline-offset:2px}.credit a:hover,.credit a:focus-visible{color:var(--ink-strong)}.credit a:focus-visible{outline:2px solid #6d7cff;outline-offset:2px;border-radius:3px}
 .developer-link{display:inline-block;margin-top:10px;padding:8px 12px;color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:12px}.developer-link:hover,.developer-link:focus-visible{color:var(--ink-strong)}.developer-link:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:4px}
-.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bg);box-shadow:var(--raise);text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
-.music-toggle:active,.music-toggle[aria-expanded=true]{box-shadow:var(--sink-s)}
+.music-toggle{width:min(100%,600px);height:52px;padding:0 20px;border:0;border-radius:999px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink);background:var(--bbg);box-shadow:var(--braise);text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
+.music-toggle:active,.music-toggle[aria-expanded=true]{box-shadow:var(--bsink-s)}
 .music-toggle:focus-visible{outline:3px solid #6d7cff;outline-offset:3px}
 body[data-page=home] #musicPanel{width:min(100%,600px);padding:clamp(16px,4vw,22px);border:0;border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
 body[data-page=home] #musicPanel h3{color:var(--ink);text-shadow:0 1px 0 var(--hi)}
@@ -99,18 +108,22 @@ body[data-page=home] #musicPanel label,body[data-page=home] #musicPanel p{color:
 body[data-page=home] #musicPanel #musicNote{color:var(--note)}
 body[data-page=home] #musicPanel input[type=url]{background:var(--bg);color:var(--ink);border:0;border-radius:999px;padding:13px 18px;box-shadow:var(--sink-s)}
 body[data-page=home] #musicPanel input[type=range]{accent-color:#77776f}
-body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
-body[data-page=home] #musicPanel button:active{box-shadow:var(--sink-s)}
+body[data-page=home] #musicPanel button{height:42px;padding:0 18px;border:0;border-radius:999px;font-weight:700;color:var(--ink);background:var(--bbg);box-shadow:var(--braise-s);text-shadow:0 1px 0 var(--hi)}
+body[data-page=home] #musicPanel button:active{box-shadow:var(--bsink-s)}
 /* the song player is just the video: no card around it and no title */
-.now-playing{width:min(100%,600px);padding:0;background:none;border:0;border-radius:0;box-shadow:none}
+.now-playing{position:relative;width:min(100%,600px);height:var(--np-h,340px);padding:0;background:none;border:0;border-radius:0;box-shadow:none}   /* wide pages: 340px (16:9 of the 600px width); phones: see the media rule below; --np-h is set when you drag the grip */
 .now-playing-title{display:none}
-.now-playing iframe,.now-playing video{display:block;width:100%;height:185px;border:0;border-radius:8px;background:#050505;box-shadow:var(--raise-s)}.now-playing #youtubeMount{width:100%;height:185px}.now-playing #youtubeMount iframe{height:100%}.now-playing.audio-only video{height:55px}
+.now-playing iframe,.now-playing video{display:block;width:100%;height:100%;border:0;border-radius:8px;background:#050505;box-shadow:var(--raise-s)}.now-playing #youtubeMount{width:100%;height:100%}.now-playing #youtubeMount iframe{height:100%}
+.now-playing.audio-only{height:auto}.now-playing.audio-only video{height:55px}.now-playing.audio-only .np-grip{display:none}
+/* drag this corner up or down to change the height of the player */
+.np-grip{position:absolute;right:2px;bottom:2px;z-index:3;width:24px;height:24px;cursor:ns-resize;touch-action:none;background:linear-gradient(135deg,transparent 50%,rgba(255,255,255,.9) 50% 58%,transparent 58% 72%,rgba(255,255,255,.9) 72% 80%,transparent 80%) no-repeat right 3px bottom 3px/12px 12px;filter:drop-shadow(0 0 1px rgba(0,0,0,.85));opacity:.85}   /* transparent body: only the small lines show, in the corner; the 24px box is the touch area */
+.np-grip:hover,.np-grip:focus-visible{opacity:1}.np-grip:focus-visible{outline:2px solid #6d7cff;outline-offset:-2px;border-radius:4px}
 
 /* corner control added by editor.js (Sample list) */
-body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bg);box-shadow:var(--raise-s);text-shadow:0 1px 0 var(--hi)}
+body[data-page=home] .ed-sample{color:var(--ink);border:0;background:var(--bbg);box-shadow:var(--braise-s);text-shadow:0 1px 0 var(--hi)}
 body[data-page=home] .ed-sample option{background:var(--opt-bg);color:var(--opt-ink)}
 
-@media(max-width:730px){.now-playing iframe,.now-playing video,.now-playing #youtubeMount{height:clamp(120px,34vw,180px)}.now-playing.audio-only video{height:49px}}
+@media(max-width:730px){.now-playing{height:var(--np-h,calc(clamp(120px,34vw,180px) + 40px))}.now-playing.audio-only{height:auto}.now-playing.audio-only video{height:49px}}
 
 /* phones: smaller Edit pill, smaller punch labels (still two lines), compact music controls */
 @media(max-width:560px){
@@ -143,7 +156,7 @@ body[data-page=home] .ed-sample option{background:var(--opt-bg);color:var(--opt-
 <body data-page="home"><main>
 <header class="top"><div class="language-bar"><label for="languageSelect" data-i18n="languageLabel">🌐 言語</label><select id="languageSelect" aria-label="Language"><option value="ja">日本語</option><option value="en">English</option><option value="zh">简体中文</option><option value="ko">한국어</option></select></div><button type="button" class="theme-toggle" aria-pressed="false">&#9790;</button></header>
 <!-- the player for a loaded song sits at the top of the page; the music button and panel stay below the device -->
-<div class="now-playing" id="nowPlaying" hidden><div class="now-playing-title" id="nowPlayingTitle" data-i18n="nowPlayingDefault">再生中の曲</div><video id="musicMedia" controls playsinline preload="metadata" hidden></video><div id="youtubeMount" hidden></div></div>
+<div class="now-playing" id="nowPlaying" hidden><div class="now-playing-title" id="nowPlayingTitle" data-i18n="nowPlayingDefault">再生中の曲</div><video id="musicMedia" controls playsinline preload="metadata" hidden></video><div id="youtubeMount" hidden></div><span class="np-grip" id="npGrip" role="separator" aria-orientation="horizontal" aria-label="Resize player (drag, or use the up and down arrow keys)" tabindex="0"></span></div>
 <div class="device">
  <div class="bezel"><div class="stage" id="stage"><canvas id="gameCanvas" width="750" height="500" aria-label="パンチ映像"></canvas></div></div>
  <div class="brand"><button type="button" class="brand-power" id="ledToggle" aria-pressed="true" title="LED screen effect: on">PUNCH</button><a class="brand-edit" href="#edit">&#9998; Edit</a></div>
@@ -170,12 +183,25 @@ body[data-page=home] .ed-sample option{background:var(--opt-bg);color:var(--opt-
 <p class="legal-foot"><a href="https://www.instagram.com/artsipan_" target="_blank" rel="noopener noreferrer">Instagram</a></p></section>
 </main>
 <script>
+// Player height: drag the grip in its bottom-right corner (or press the up/down arrow keys on it). The height is remembered on this device.
+(()=>{const np=document.getElementById('nowPlaying'),g=document.getElementById('npGrip'),KEY='chrollo-player-h',MIN=120;
+ const max=()=>Math.round(innerHeight*0.85),clamp=h=>Math.max(MIN,Math.min(max(),h));
+ const apply=h=>np.style.setProperty('--np-h',Math.round(h)+'px'),save=()=>{try{localStorage.setItem(KEY,String(Math.round(np.getBoundingClientRect().height)))}catch(e){}};
+ try{const s=parseFloat(localStorage.getItem(KEY));if(s>=MIN)apply(clamp(s))}catch(e){}
+ let drag=null;
+ g.addEventListener('pointerdown',e=>{drag={y:e.clientY,h:np.getBoundingClientRect().height};try{g.setPointerCapture(e.pointerId)}catch(_){}e.preventDefault()});
+ g.addEventListener('pointermove',e=>{if(drag)apply(clamp(drag.h+e.clientY-drag.y))});
+ const end=()=>{if(drag){drag=null;save()}};g.addEventListener('pointerup',end);g.addEventListener('pointercancel',end);
+ g.addEventListener('keydown',e=>{const d={ArrowDown:20,ArrowUp:-20}[e.key];if(!d)return;e.preventDefault();apply(clamp(np.getBoundingClientRect().height+d));save()});
+})();
+</script>
+<script>
 // Light / dark: the toggle buttons (game page and edit page) switch html[data-theme]; the choice is remembered on this device.
 (()=>{const KEY='chrollo-theme',root=document.documentElement,meta=document.querySelector('meta[name=theme-color]');
  const tr=k=>{try{return window.i18n?window.i18n.t(k):''}catch(e){return ''}};
  function paint(){
   const dark=root.dataset.theme==='dark';
-  if(meta)meta.content=dark?'#26272b':'#e4e4e2';
+  if(meta)meta.content=dark?'#17181d':'#e4e4e2';
   document.querySelectorAll('.theme-toggle').forEach(b=>{
    b.textContent=dark?'\u2600\uFE0E':'\u263E';
    const label=(tr(dark?'themeToLight':'themeToDark'))||(dark?'Switch to light mode':'Switch to dark mode');

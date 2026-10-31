@@ -35,8 +35,8 @@ css.textContent=`
 /* edit page: same soft plastic as the game page (variables come from body[data-page=edit] in index.html) */
 #editPage{width:100%;max-width:1100px;padding:clamp(12px,3.5vw,28px) clamp(14px,4vw,28px) 48px;gap:clamp(12px,3vw,18px);align-items:center;color:var(--ink)}
 .ed-top{width:100%;display:flex;align-items:center;gap:14px}.ed-top h2{margin:0;font-size:clamp(15px,4vw,19px);color:var(--ink);text-shadow:0 1px 0 var(--hi)}
-.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bg);border-radius:999px;box-shadow:var(--raise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 var(--hi)}
-.ed-back:active{box-shadow:var(--sink-s)}.ed-back:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
+.ed-back{color:var(--ink);text-decoration:none;padding:0 18px;height:42px;display:inline-flex;align-items:center;background:var(--bbg);border-radius:999px;box-shadow:var(--braise-s);font-size:14px;font-weight:700;white-space:nowrap;text-shadow:0 1px 0 var(--hi)}
+.ed-back:active{box-shadow:var(--bsink-s)}.ed-back:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 .ed-layout{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,3vw,22px);align-items:start}
 @media(min-width:900px){.ed-layout{grid-template-columns:minmax(0,500px) minmax(0,1fr)}}
 .ed-tools{display:flex;flex-direction:column;gap:clamp(14px,3vw,22px);min-width:0}
@@ -47,7 +47,7 @@ css.textContent=`
 
 /* live preview: stays in view while you work the sliders below */
 .ed-live{position:sticky;top:8px;z-index:6;padding:clamp(10px,2.8vw,14px);border-radius:28px;background:var(--bg);box-shadow:var(--raise)}
-.ed-bezel{position:relative;padding:clamp(8px,2.4vw,12px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121}
+.ed-bezel{position:relative;padding:clamp(8px,2.4vw,12px);border-radius:8px;background:#0e0e0e;box-shadow:inset 0 3px 10px #000,inset 0 0 0 2px #212121,var(--bezel-ring)}
 #edPreview{width:100%;display:block;border-radius:8px;background:#100e15;cursor:grab;touch-action:none;box-shadow:0 0 0 1px #000}#edPreview:active{cursor:grabbing}
 /* frame timeline: one tick per cell, filled up to the frame you are on; click or drag to scrub */
 .ed-frames{margin-top:12px}
@@ -115,7 +115,7 @@ css.textContent=`
 }
 
 /* buttons: raised pills that sink when pressed */
-#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bg);border:0;border-radius:999px;box-shadow:var(--raise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
+#editPage .ed-btn,#editPage button{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:42px;min-width:42px;margin:0;padding:0 16px;font-size:14px;font-weight:700;line-height:1;color:var(--ink);background:var(--bbg);border:0;border-radius:999px;box-shadow:var(--braise-s);cursor:pointer;white-space:nowrap;text-shadow:0 1px 0 var(--hi);transition:box-shadow .08s}
 #editPage .ed-btn:active,#editPage button:active{box-shadow:var(--sink-s)}
 #editPage .ed-btn:focus-within,#editPage button:focus-visible{outline:2px solid #6d7cff;outline-offset:3px}
 #editPage #edPlayBtn{flex:0 0 auto;color:var(--play-ink);background:linear-gradient(145deg,var(--play-a),var(--play-b))}
@@ -133,12 +133,12 @@ css.textContent=`
 #edInfo .ed-infobody{padding:6px 2px 4px}
 #editPage #edInfo .ed-infobody p{font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
 .ed-card .ed-drop{margin:12px 0 0}.ed-card .ed-drop+.ed-drop{margin-top:10px}
-.ed-drop{margin:0 0 4px;border-radius:22px;background:var(--bg);box-shadow:var(--raise-s)}
+.ed-drop{margin:0 0 4px;border-radius:22px;background:var(--bbg);box-shadow:var(--braise-s)}
 .ed-drop summary{list-style:none;display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 20px;font-size:14px;font-weight:800;color:var(--ink);cursor:pointer;user-select:none;text-shadow:0 1px 0 var(--hi)}
 .ed-drop summary::-webkit-details-marker{display:none}
 .ed-drop summary::after{content:"\\25BE";transition:transform .15s;color:var(--ink-soft)}.ed-drop[open] summary::after{transform:rotate(180deg)}
 .ed-drop summary:focus-visible{outline:2px solid #6d7cff;outline-offset:3px;border-radius:22px}
-.ed-drop[open]{box-shadow:var(--sink-s)}
+.ed-drop[open]{box-shadow:var(--bsink-s)}
 .ed-ctl{display:flex;flex-direction:column;gap:12px;padding:6px 20px 20px}.ed-ctl h4{margin:0;font-size:13px;color:var(--ink);font-weight:800;text-shadow:0 1px 0 var(--hi)}
 .ed-ctl .ed-sep{margin-top:10px;padding-top:16px;border-top:1px solid var(--line);box-shadow:0 -1px 0 var(--hi2)}
 /* "This move: Front ▾" is itself the move chooser (an invisible <select> lies on top); Global is a button on the right */
@@ -149,12 +149,12 @@ css.textContent=`
 .ed-pick:focus-within{outline:2px solid #6d7cff;outline-offset:2px}
 .ed-movehead.global .ed-pick{opacity:.6}
 main#editPage #edGlobalBtn{height:30px;min-width:0;padding:0 14px;font-size:12px;flex:0 0 auto}
-main#editPage #edGlobalBtn[aria-pressed=true]{box-shadow:var(--sink-s);color:var(--ink-strong)}
+main#editPage #edGlobalBtn[aria-pressed=true]{box-shadow:var(--bsink-s);color:var(--ink-strong)}
 .ed-slider{display:grid;grid-template-columns:112px minmax(0,1fr) 54px;gap:12px;align-items:center}
 .ed-slider span{font-size:13px;color:var(--ink-soft)}.ed-slider output{font-size:13px;font-weight:700;color:var(--ink);text-align:right}
 .ed-slider input{-webkit-appearance:none;appearance:none;width:100%;height:14px;margin:0;border-radius:999px;background:var(--bg);box-shadow:var(--sink-s);cursor:pointer}
-.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
-.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--raise-s)}
+.ed-slider input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--braise-s)}
+.ed-slider input::-moz-range-thumb{width:24px;height:24px;border-radius:50%;border:0;background:linear-gradient(145deg,var(--k1),var(--k2));box-shadow:var(--braise-s)}
 .ed-slider input:disabled{opacity:.35;cursor:default}
 .ed-slider input:focus-visible{outline:2px solid #6d7cff;outline-offset:4px}
 #edPicker{width:100%;display:block;border-radius:16px;cursor:pointer;background:#000;margin:14px 0 6px;box-shadow:var(--raise-s)}
